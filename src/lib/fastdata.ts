@@ -54,7 +54,12 @@ const tags: Record<string, string | undefined> = {
 };
 
 export const bundlesFor = (id: NetworkId): Bundle[] =>
-  sizes.map((size, i) => ({ size, price: priceTable[id][i], tag: tags[size] }));
+  sizes.map((size, i) => {
+    const b: Bundle = { size, price: priceTable[id][i] as number };
+    const tag = tags[size];
+    if (tag) b.tag = tag;
+    return b;
+  });
 
 export const MOMO = [
   { label: "MTN MoMo Merchant", value: "FastData GH · 059 366 0497" },
