@@ -65,6 +65,10 @@
   --color-telecel-foreground: var(--telecel-foreground);
   --color-at: var(--at);
   --color-at-foreground: var(--at-foreground);
+  --color-orange: var(--orange);
+  --color-orange-foreground: var(--orange-foreground);
+  --color-safaricom: var(--safaricom);
+  --color-safaricom-foreground: var(--safaricom-foreground);
   --color-whatsapp: var(--whatsapp);
   --color-whatsapp-foreground: var(--whatsapp-foreground);
   --color-surface: var(--surface);
@@ -113,6 +117,10 @@
   --telecel-foreground: oklch(0.98 0.01 27);
   --at: oklch(0.55 0.17 253);
   --at-foreground: oklch(0.98 0.01 253);
+  --orange: oklch(0.72 0.19 48);
+  --orange-foreground: oklch(0.99 0.01 48);
+  --safaricom: oklch(0.62 0.17 145);
+  --safaricom-foreground: oklch(0.99 0.01 145);
   --whatsapp: oklch(0.66 0.17 149);
   --whatsapp-foreground: oklch(0.99 0.01 149);
   --surface: oklch(0.985 0.008 250);

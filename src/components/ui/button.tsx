@@ -22,6 +22,10 @@ const buttonVariants = cva(
         telecel:
           "bg-telecel text-telecel-foreground shadow-card hover:brightness-105 rounded-xl font-semibold",
         at: "bg-at text-at-foreground shadow-card hover:brightness-105 rounded-xl font-semibold",
+        orange:
+          "bg-orange text-orange-foreground shadow-card hover:brightness-105 rounded-xl font-semibold",
+        safaricom:
+          "bg-safaricom text-safaricom-foreground shadow-card hover:brightness-105 rounded-xl font-semibold",
       },
       size: {
         default: "h-9 px-4 py-2",
