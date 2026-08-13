@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +9,21 @@ import {
 } from "@/components/ui/accordion";
 import { OrderDialog } from "@/components/OrderDialog";
 import { VendorSection } from "@/components/VendorSection";
-import { NETWORKS, MOMO, bundlesFor, waLink, type Bundle, type NetworkId } from "@/lib/fastdata";
+import { CountrySelect } from "@/components/CountrySelect";
+import {
+  ACCENT_BG,
+  ACCENT_BUTTON,
+  COUNTRIES,
+  bundlesFor,
+  formatMoney,
+  waLink,
+  type Bundle,
+  type Country,
+} from "@/lib/fastdata";
 
-const title = "FastData GH — Instant Non-Expiry Data Bundles";
+const title = "FastData Africa — Instant Data Bundles Across Africa";
 const description =
-  "Buy cheap non-expiry MTN, Telecel and AT data bundles in Ghana with automated WhatsApp delivery. Become an agent and earn GH₵ 2,500+ monthly.";
+  "Buy non-expiry mobile data in Ghana, Nigeria, Kenya, South Africa, Egypt and more. Local currency Paystack & Mobile Money checkout, plus a pan-African agent programme.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,39 +37,53 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const buyVariant: Record<NetworkId, "mtn" | "telecel" | "at"> = {
-  mtn: "mtn",
-  telecel: "telecel",
-  at: "at",
-};
-
 function Index() {
-  const [net, setNet] = useState<NetworkId>("mtn");
+  const [country, setCountry] = useState<Country>(COUNTRIES[0] as Country);
+  const [netId, setNetId] = useState(country.networks[0]!.id);
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [open, setOpen] = useState(false);
 
-  const active = NETWORKS.find((n) => n.id === net)!;
+  const netIndex = Math.max(
+    0,
+    country.networks.findIndex((n) => n.id === netId),
+  );
+  const active = country.networks[netIndex]!;
+  const bundles = useMemo(() => bundlesFor(country, netIndex), [country, netIndex]);
+
+  const changeCountry = (c: Country) => {
+    setCountry(c);
+    setNetId(c.networks[0]!.id);
+  };
 
   return (
     <div className="min-h-screen pb-28">
-      <header className="bg-hero px-4 pt-8 pb-12 text-primary-foreground">
+      <header className="bg-hero px-4 pt-5 pb-12 text-primary-foreground">
         <div className="mx-auto max-w-md">
-          <div className="flex items-center justify-between">
-            <span className="text-lg font-extrabold tracking-tight">FastData GH</span>
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-lg font-extrabold tracking-tight">FastData Africa</span>
             <span className="animate-pulse rounded-full bg-whatsapp px-3 py-1 text-xs font-bold text-whatsapp-foreground">
               Automated Delivery
             </span>
           </div>
+
+          <CountrySelect
+            value={country}
+            onChange={changeCountry}
+            className="mt-4 h-12 w-full rounded-xl border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground"
+          />
+
           <h1 className="mt-6 text-3xl font-extrabold leading-tight">
             Instant Data Bundles <span className="text-mtn">•</span> Non-Expiry
           </h1>
           <p className="mt-3 text-sm text-primary-foreground/80">
-            MTN, Telecel and AT bundles delivered in minutes. Pay with MoMo, confirm on WhatsApp,
-            data lands on the number you choose.
+            Pan-African data delivery in {COUNTRIES.length} countries. Prices in{" "}
+            {country.currency}, paid with Paystack or local Mobile Money.
           </p>
-          <div className="mt-5 flex gap-2 text-xs font-semibold">
+          <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">No expiry</span>
-            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">Agent prices</span>
+            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
+              Local currency
+            </span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">24/7 support</span>
           </div>
         </div>
@@ -67,14 +91,14 @@ function Index() {
 
       <main className="mx-auto -mt-6 max-w-md">
         <section className="px-4">
-          <div className="grid grid-cols-3 gap-2 rounded-2xl bg-card p-2 shadow-card">
-            {NETWORKS.map((n) => (
+          <div className="flex gap-2 overflow-x-auto rounded-2xl bg-card p-2 shadow-card">
+            {country.networks.map((n) => (
               <button
                 key={n.id}
                 type="button"
-                onClick={() => setNet(n.id)}
-                className={`rounded-xl py-3 text-sm font-bold transition ${
-                  net === n.id ? n.accent : "text-muted-foreground hover:bg-secondary"
+                onClick={() => setNetId(n.id)}
+                className={`flex-1 whitespace-nowrap rounded-xl px-3 py-3 text-sm font-bold transition ${
+                  netId === n.id ? ACCENT_BG[n.accent] : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
                 {n.short}
@@ -83,24 +107,31 @@ function Index() {
           </div>
 
           <h2 className="mt-6 text-xl font-bold">{active.name} non-expiry bundles</h2>
+          <p className="text-sm text-muted-foreground">
+            Prices shown in {country.currency} ({country.symbol})
+          </p>
           <div className="mt-4 grid grid-cols-2 gap-3">
-            {bundlesFor(net).map((b) => (
+            {bundles.map((b) => (
               <article
                 key={b.size}
                 className="flex flex-col rounded-2xl border border-border bg-card p-4 shadow-card"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-1">
                   <span className="text-2xl font-extrabold">{b.size}</span>
                   {b.tag ? (
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${active.accent}`}>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${ACCENT_BG[active.accent]}`}
+                    >
                       {b.tag}
                     </span>
                   ) : null}
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">Non-expiry · {active.short}</p>
-                <p className="mt-3 text-xl font-bold">GH₵ {b.price}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Non-expiry · {active.short} · {country.flag}
+                </p>
+                <p className="mt-3 text-lg font-bold">{formatMoney(country, b.price)}</p>
                 <Button
-                  variant={buyVariant[net]}
+                  variant={ACCENT_BUTTON[active.accent]}
                   className="mt-3 h-11 w-full"
                   onClick={() => {
                     setBundle(b);
@@ -116,12 +147,14 @@ function Index() {
 
         <section className="mt-8 px-4">
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-            <h2 className="text-lg font-bold">MoMo payment details</h2>
+            <h2 className="text-lg font-bold">
+              Payment options in {country.flag} {country.name}
+            </h2>
             <p className="text-sm text-muted-foreground">
-              Send payment to any of these, then share the screenshot on WhatsApp.
+              Checkout auto-adjusts to {country.currency} for Paystack and Mobile Money.
             </p>
             <ul className="mt-4 space-y-2">
-              {MOMO.map((m) => (
+              {country.momo.map((m) => (
                 <li key={m.label} className="flex justify-between gap-3 text-sm">
                   <span className="text-muted-foreground">{m.label}</span>
                   <span className="font-semibold">{m.value}</span>
@@ -131,55 +164,59 @@ function Index() {
           </div>
         </section>
 
-        <VendorSection />
+        <VendorSection country={country} onCountryChange={changeCountry} />
 
         <section className="px-4 pb-8">
           <h2 className="text-xl font-bold">How it works &amp; FAQ</h2>
           <ol className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>1. Pick your network and bundle size.</li>
+            <li>1. Pick your country, network and bundle size.</li>
             <li>2. Enter the recipient number and confirm the network.</li>
-            <li>3. Pay via MoMo, then tap Complete Order on WhatsApp.</li>
+            <li>3. Pay in your local currency, then confirm on WhatsApp.</li>
           </ol>
           <Accordion type="single" collapsible className="mt-4">
             <AccordionItem value="a">
-              <AccordionTrigger>How fast is delivery?</AccordionTrigger>
+              <AccordionTrigger>Which countries are supported?</AccordionTrigger>
               <AccordionContent>
-                Most orders are processed automatically within 1–15 minutes. Bulk orders may take
-                slightly longer during peak hours.
+                {COUNTRIES.map((c) => `${c.flag} ${c.name}`).join(", ")} — with more African
+                markets added every month.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="b">
-              <AccordionTrigger>Do the bundles really never expire?</AccordionTrigger>
+              <AccordionTrigger>How fast is delivery?</AccordionTrigger>
               <AccordionContent>
-                Yes. All listed bundles are non-expiry — the data stays on the number until it is
-                fully used.
+                Most orders are processed automatically within 1–15 minutes, in every country we
+                serve.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="c">
-              <AccordionTrigger>Can I send data to another person?</AccordionTrigger>
+              <AccordionTrigger>What currency am I charged in?</AccordionTrigger>
               <AccordionContent>
-                Absolutely. Just enter their number as the recipient during checkout.
+                Always the currency of the country you select — {country.currency} right now. No
+                hidden conversion at checkout.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="d">
-              <AccordionTrigger>What does the agent registration fee cover?</AccordionTrigger>
+              <AccordionTrigger>Can I become an agent outside Ghana?</AccordionTrigger>
               <AccordionContent>
-                A one-time GH₵ 50 (Starter) or GH₵ 100 (VIP) fee unlocks wholesale pricing, your
-                agent order channel and resale support.
+                Yes. The vendor portal supports agents in every listed country, with local
+                registration fees and local earnings potential.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </section>
 
         <footer className="px-4 pb-10 text-center text-xs text-muted-foreground">
-          FastData GH · Accra, Ghana · WhatsApp +233 50 366 0497
+          FastData Africa · Serving West, East, Southern &amp; North Africa · WhatsApp +233 50 366
+          0497
         </footer>
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-3 backdrop-blur">
         <Button asChild variant="whatsapp" className="mx-auto flex h-14 w-full max-w-md text-base">
           <a
-            href={waLink("Hello FastData GH! I need help with a data bundle order.")}
+            href={waLink(
+              `Hello FastData Africa! I need help with a data bundle order in ${country.name}.`,
+            )}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -188,7 +225,13 @@ function Index() {
         </Button>
       </div>
 
-      <OrderDialog open={open} onOpenChange={setOpen} bundle={bundle} network={net} />
+      <OrderDialog
+        open={open}
+        onOpenChange={setOpen}
+        bundle={bundle}
+        country={country}
+        network={active}
+      />
     </div>
   );
 }
