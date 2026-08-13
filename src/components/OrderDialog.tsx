@@ -14,6 +14,7 @@ import {
   formatMoney,
   waLink,
   isValidPhone,
+  makeOrderId,
   type Bundle,
   type Country,
   type Network,
@@ -25,9 +26,17 @@ type Props = {
   bundle: Bundle | null;
   country: Country;
   network: Network;
+  onReceipt: (r: {
+    orderId: string;
+    recipient: string;
+    item: string;
+    amount: string;
+    country: string;
+    date: string;
+  }) => void;
 };
 
-export function OrderDialog({ open, onOpenChange, bundle, country, network }: Props) {
+export function OrderDialog({ open, onOpenChange, bundle, country, network, onReceipt }: Props) {
   const [phone, setPhone] = useState("");
   const [netId, setNetId] = useState(network.id);
   const [error, setError] = useState("");
@@ -51,6 +60,16 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network }: Pr
     }
     setError("");
     setStep("pay");
+    if (bundle) {
+      onReceipt({
+        orderId: makeOrderId("FD", clean),
+        recipient: clean,
+        item: `${bundle.size} ${active.short} Non-Expiry`,
+        amount: formatMoney(country, bundle.price),
+        country: `${country.flag} ${country.name}`,
+        date: new Date().toLocaleString(),
+      });
+    }
   };
 
   const message =
