@@ -3,16 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CountrySelect } from "@/components/CountrySelect";
-import { waLink, isValidPhone, formatMoney, type Country } from "@/lib/fastdata";
+import { waLink, isValidPhone, formatMoney, makeOrderId, type Country } from "@/lib/fastdata";
 
 type PlanId = "starter" | "vip";
 
 export function VendorSection({
   country,
   onCountryChange,
+  onReceipt,
 }: {
   country: Country;
   onCountryChange: (c: Country) => void;
+  onReceipt: (r: {
+    orderId: string;
+    recipient: string;
+    item: string;
+    amount: string;
+    country: string;
+    date: string;
+  }) => void;
 }) {
   const [plan, setPlan] = useState<PlanId>("vip");
   const [name, setName] = useState("");
@@ -54,6 +63,14 @@ export function VendorSection({
     setError("");
     const msg = `Hello! I want to register as a FastData Africa agent.\nCountry: ${country.name} ${country.flag}\nPlan: ${selected.name} (Registration Fee ${formatMoney(country, selected.fee)})\nName: ${name.trim().slice(0, 80)}\nMobile Money Number: ${phone.replace(/[\s-]/g, "")}\nLocation: ${location.trim().slice(0, 80) || "N/A"}\nI'm ready to pay the registration fee in ${country.currency} now.`;
     window.open(waLink(msg), "_blank", "noopener,noreferrer");
+    onReceipt({
+      orderId: makeOrderId("VN", phone.replace(/[\s-]/g, "")),
+      recipient: phone.replace(/[\s-]/g, ""),
+      item: `${selected.name} registration`,
+      amount: formatMoney(country, selected.fee),
+      country: `${country.flag} ${country.name}`,
+      date: new Date().toLocaleString(),
+    });
   };
 
   return (

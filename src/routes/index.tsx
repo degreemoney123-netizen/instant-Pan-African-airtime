@@ -10,6 +10,9 @@ import {
 import { OrderDialog } from "@/components/OrderDialog";
 import { VendorSection } from "@/components/VendorSection";
 import { CountrySelect } from "@/components/CountrySelect";
+import { OrderTracker } from "@/components/OrderTracker";
+import { SalesTicker } from "@/components/SalesTicker";
+import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
 import {
   ACCENT_BG,
   ACCENT_BUTTON,
@@ -42,6 +45,7 @@ function Index() {
   const [netId, setNetId] = useState(country.networks[0]!.id);
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [open, setOpen] = useState(false);
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
 
   const netIndex = Math.max(
     0,
@@ -61,6 +65,12 @@ function Index() {
         <div className="mx-auto max-w-md">
           <div className="flex items-center justify-between gap-2">
             <span className="text-lg font-extrabold tracking-tight">FastData Africa</span>
+            <a
+              href="#tracking"
+              className="rounded-full border border-primary-foreground/30 px-3 py-1 text-xs font-bold"
+            >
+              Track order
+            </a>
             <span className="animate-pulse rounded-full bg-whatsapp px-3 py-1 text-xs font-bold text-whatsapp-foreground">
               Automated Delivery
             </span>
@@ -164,7 +174,9 @@ function Index() {
           </div>
         </section>
 
-        <VendorSection country={country} onCountryChange={changeCountry} />
+        <OrderTracker />
+
+        <VendorSection country={country} onCountryChange={changeCountry} onReceipt={setReceipt} />
 
         <section className="px-4 pb-8">
           <h2 className="text-xl font-bold">How it works &amp; FAQ</h2>
@@ -231,7 +243,11 @@ function Index() {
         bundle={bundle}
         country={country}
         network={active}
+        onReceipt={setReceipt}
       />
+
+      <ReceiptModal receipt={receipt} onOpenChange={(v) => !v && setReceipt(null)} />
+      <SalesTicker />
     </div>
   );
 }
