@@ -62,7 +62,7 @@ export const COUNTRIES: Country[] = [
       n("at", "AT Ghana", "AT", "at"),
     ],
     momo: [
-      { label: "MTN MoMo Merchant", value: "FastData · 059 366 0497" },
+      { label: "MTN MoMo Merchant", value: "FastData · 050 366 0497" },
       { label: "Telecel Cash", value: "FastData · 050 366 0497" },
     ],
     vendor: {
@@ -395,3 +395,41 @@ export const waLink = (message: string) =>
   `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message.slice(0, 900))}`;
 
 export const isValidPhone = (v: string) => /^[0-9+]{8,15}$/.test(v.replace(/[\s-]/g, ""));
+
+export type OrderStatus = "Processing" | "Delivered" | "Pending Confirmation";
+
+const hash = (v: string) => {
+  let h = 0;
+  for (let i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) >>> 0;
+  return h;
+};
+
+export const makeOrderId = (prefix: string, seed: string) =>
+  `${prefix}-${(hash(seed + Date.now().toString()) % 900000 + 100000).toString()}`;
+
+export const trackOrder = (phone: string): { status: OrderStatus; note: string; ref: string } => {
+  const clean = phone.replace(/[\s-]/g, "");
+  const h = hash(clean);
+  const statuses: OrderStatus[] = ["Delivered", "Processing", "Pending Confirmation"];
+  const status = statuses[h % 3] as OrderStatus;
+  const note =
+    status === "Delivered"
+      ? "Bundle credited successfully. Dial your data balance code to confirm."
+      : status === "Processing"
+        ? "Payment received. Your bundle is being credited (1–15 minutes)."
+        : "We have not matched a payment yet. Send your receipt on WhatsApp.";
+  return { status, note, ref: `FD-${(h % 900000) + 100000}` };
+};
+
+export const TICKER_EVENTS = [
+  "Ama from Kumasi bought a 10GB MTN bundle",
+  "Kweku from Takoradi registered as a VIP Vendor",
+  "Chidi from Lagos bought a 20GB Airtel bundle",
+  "Njeri from Nairobi bought a 5GB Safaricom bundle",
+  "Yaw from Accra bought a 50GB Telecel bundle",
+  "Fatou from Dakar registered as a Starter Agent",
+  "Thabo from Johannesburg bought a 10GB Vodacom bundle",
+  "Amina from Cairo bought a 3GB Orange bundle",
+  "Kofi from Tamale bought a 100GB MTN bundle",
+  "Grace from Kampala registered as a VIP Vendor",
+];
