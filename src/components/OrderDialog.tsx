@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,59 +10,55 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
-  NETWORKS,
-  MOMO,
+  ACCENT_BG,
+  formatMoney,
   waLink,
-  isValidGhNumber,
+  isValidPhone,
   type Bundle,
-  type NetworkId,
+  type Country,
+  type Network,
 } from "@/lib/fastdata";
 
 type Props = {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   bundle: Bundle | null;
-  network: NetworkId;
+  country: Country;
+  network: Network;
 };
 
-export function OrderDialog({ open, onOpenChange, bundle, network }: Props) {
+export function OrderDialog({ open, onOpenChange, bundle, country, network }: Props) {
   const [phone, setPhone] = useState("");
-  const [net, setNet] = useState<NetworkId>(network);
+  const [netId, setNetId] = useState(network.id);
   const [error, setError] = useState("");
   const [step, setStep] = useState<"form" | "pay">("form");
 
-  const active = NETWORKS.find((n) => n.id === net)!;
+  useEffect(() => {
+    if (open) {
+      setNetId(network.id);
+      setStep("form");
+      setError("");
+    }
+  }, [open, network.id]);
 
-  if (open && net !== network && step === "form" && phone === "" && !error) {
-    // keep dialog network in sync when reopened from another tab
-    setNet(network);
-  }
+  const active = country.networks.find((x) => x.id === netId) ?? network;
 
   const submit = () => {
-    const clean = phone.replace(/\s+/g, "");
-    if (!isValidGhNumber(clean)) {
-      setError("Enter a valid 10-digit number, e.g. 0593660497");
+    const clean = phone.replace(/[\s-]/g, "");
+    if (!isValidPhone(clean)) {
+      setError("Enter a valid mobile number for " + country.name);
       return;
     }
     setError("");
     setStep("pay");
   };
 
-  const message = bundle
-    ? `Hello! I want to buy ${bundle.size} ${active.short} for GH₵ ${bundle.price}. Send to Phone Number: ${phone.replace(/\s+/g, "")}`
-    : "";
+  const message =
+    bundle &&
+    `Hello! I want to buy ${bundle.size} ${active.short} (${country.name} ${country.flag}) for ${formatMoney(country, bundle.price)}. Send to Phone Number: ${phone.replace(/[\s-]/g, "")}`;
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(v) => {
-        onOpenChange(v);
-        if (!v) {
-          setStep("form");
-          setError("");
-        }
-      }}
-    >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[92vw] rounded-2xl sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl">
@@ -70,7 +66,7 @@ export function OrderDialog({ open, onOpenChange, bundle, network }: Props) {
           </DialogTitle>
           <DialogDescription>
             {bundle
-              ? `${bundle.size} ${active.short} Non-Expiry — GH₵ ${bundle.price}`
+              ? `${bundle.size} ${active.short} Non-Expiry — ${formatMoney(country, bundle.price)} (${country.currency})`
               : ""}
           </DialogDescription>
         </DialogHeader>
@@ -81,9 +77,9 @@ export function OrderDialog({ open, onOpenChange, bundle, network }: Props) {
               <Label htmlFor="recipient">Recipient mobile number</Label>
               <Input
                 id="recipient"
-                inputMode="numeric"
-                maxLength={13}
-                placeholder="059XXXXXXX"
+                inputMode="tel"
+                maxLength={15}
+                placeholder="e.g. 059XXXXXXX"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="h-12 text-base"
@@ -92,20 +88,22 @@ export function OrderDialog({ open, onOpenChange, bundle, network }: Props) {
             </div>
 
             <div className="space-y-2">
-              <Label>Confirm mobile network</Label>
+              <Label>
+                Confirm mobile network in {country.flag} {country.name}
+              </Label>
               <div className="grid grid-cols-3 gap-2">
-                {NETWORKS.map((n) => (
+                {country.networks.map((x) => (
                   <button
-                    key={n.id}
+                    key={x.id}
                     type="button"
-                    onClick={() => setNet(n.id)}
-                    className={`rounded-xl border px-2 py-3 text-sm font-semibold transition ${
-                      net === n.id
-                        ? `${n.accent} border-transparent`
+                    onClick={() => setNetId(x.id)}
+                    className={`rounded-xl border px-2 py-3 text-xs font-semibold transition ${
+                      netId === x.id
+                        ? `${ACCENT_BG[x.accent]} border-transparent`
                         : "border-border bg-card text-muted-foreground"
                     }`}
                   >
-                    {n.short}
+                    {x.short}
                   </button>
                 ))}
               </div>
@@ -118,9 +116,11 @@ export function OrderDialog({ open, onOpenChange, bundle, network }: Props) {
         ) : (
           <div className="space-y-4">
             <div className="rounded-2xl border border-border bg-secondary p-4">
-              <p className="text-sm font-semibold">Step 1 — Send payment</p>
+              <p className="text-sm font-semibold">
+                Step 1 — Pay in {country.currency} via Paystack or Mobile Money
+              </p>
               <ul className="mt-3 space-y-2">
-                {MOMO.map((m) => (
+                {country.momo.map((m) => (
                   <li key={m.label} className="flex justify-between gap-3 text-sm">
                     <span className="text-muted-foreground">{m.label}</span>
                     <span className="font-semibold">{m.value}</span>
@@ -128,18 +128,21 @@ export function OrderDialog({ open, onOpenChange, bundle, network }: Props) {
                 ))}
               </ul>
               <p className="mt-3 text-sm">
-                Amount: <span className="font-bold">GH₵ {bundle?.price}</span> · Reference:{" "}
-                <span className="font-bold">{phone.replace(/\s+/g, "")}</span>
+                Amount:{" "}
+                <span className="font-bold">
+                  {bundle ? formatMoney(country, bundle.price) : ""}
+                </span>{" "}
+                · Reference: <span className="font-bold">{phone.replace(/[\s-]/g, "")}</span>
               </p>
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Step 2 — Send us your payment screenshot on WhatsApp. Delivery is automated and
-              usually instant.
+              Step 2 — Send your payment screenshot on WhatsApp. Delivery is automated and usually
+              instant.
             </p>
 
             <Button asChild variant="whatsapp" className="h-14 w-full text-base">
-              <a href={waLink(message)} target="_blank" rel="noopener noreferrer">
+              <a href={waLink(message ?? "")} target="_blank" rel="noopener noreferrer">
                 Complete Order on WhatsApp
               </a>
             </Button>
