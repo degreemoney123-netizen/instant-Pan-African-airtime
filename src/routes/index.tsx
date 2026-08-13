@@ -177,7 +177,7 @@ function Index() {
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-3 backdrop-blur">
-        <Button asChild variant="whatsapp" className="mx-auto flex h-13 max-w-md py-4 text-base">
+        <Button asChild variant="whatsapp" className="mx-auto flex h-14 w-full max-w-md text-base">
           <a
             href={waLink("Hello FastData GH! I need help with a data bundle order.")}
             target="_blank"
