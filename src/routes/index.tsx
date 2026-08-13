@@ -127,7 +127,7 @@ function Index() {
                   ) : null}
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Non-expiry · {active.short} · {country.flag}
+                  Non-expiry · {active.short}
                 </p>
                 <p className="mt-3 text-lg font-bold">{formatMoney(country, b.price)}</p>
                 <Button
