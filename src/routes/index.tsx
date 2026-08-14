@@ -11,6 +11,7 @@ import { OrderDialog } from "@/components/OrderDialog";
 import { VendorSection } from "@/components/VendorSection";
 import { CountrySelect } from "@/components/CountrySelect";
 import { OrderTracker } from "@/components/OrderTracker";
+import { UtilitySection } from "@/components/UtilitySection";
 import { SalesTicker } from "@/components/SalesTicker";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
 import {
@@ -88,6 +89,9 @@ function Index() {
           <p className="mt-3 text-sm text-primary-foreground/80">
             Pan-African data delivery in {COUNTRIES.length} countries. Prices in{" "}
             {country.currency}, paid with Paystack or local Mobile Money.
+          </p>
+          <p className="mt-4 inline-flex rounded-full bg-mtn px-3 py-1.5 text-xs font-bold text-mtn-foreground">
+            Now Supporting ECG Power, TV Subscriptions &amp; Local Utility Bills!
           </p>
           <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">No expiry</span>
@@ -173,6 +177,8 @@ function Index() {
             </ul>
           </div>
         </section>
+
+        <UtilitySection country={country} onReceipt={setReceipt} />
 
         <OrderTracker />
 
