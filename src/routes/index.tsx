@@ -80,11 +80,10 @@ function Index() {
             </span>
           </div>
 
-          <CountrySelect
-            value={country}
-            onChange={changeCountry}
-            className="mt-4 h-12 w-full rounded-xl border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground"
-          />
+          <div className="mt-4">
+            <CountryRegionBar country={country} onChange={changeCountry} />
+          </div>
+
 
           <h1 className="mt-6 text-3xl font-extrabold leading-tight">
             Instant Data Bundles <span className="text-mtn">•</span> Non-Expiry
