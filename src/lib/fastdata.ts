@@ -28,7 +28,11 @@ export type Country = {
   code: string;
   name: string;
   flag: string;
-  region: "West Africa" | "East Africa" | "Southern Africa" | "North Africa";
+  region: "West Africa" | "East Africa" | "Southern Africa" | "North Africa" | "Global";
+  /** international dialling code, e.g. +233 */
+  dial: string;
+  /** approximate value of 1 unit of local currency in USD (for the converter) */
+  usd: number;
   currency: string;
   symbol: string;
   /** price of 1GB in local currency; other sizes scale from this */
@@ -49,6 +53,8 @@ const n = (id: string, name: string, short: string, accent: AccentId): Network =
 export const COUNTRIES: Country[] = [
   {
     code: "GH",
+    dial: "+233",
+    usd: 0.083,
     name: "Ghana",
     flag: "🇬🇭",
     region: "West Africa",
@@ -75,6 +81,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "NG",
+    dial: "+234",
+    usd: 0.00065,
     name: "Nigeria",
     flag: "🇳🇬",
     region: "West Africa",
@@ -102,6 +110,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "CI",
+    dial: "+225",
+    usd: 0.0016,
     name: "Côte d'Ivoire",
     flag: "🇨🇮",
     region: "West Africa",
@@ -128,6 +138,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "SN",
+    dial: "+221",
+    usd: 0.0016,
     name: "Senegal",
     flag: "🇸🇳",
     region: "West Africa",
@@ -154,6 +166,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "KE",
+    dial: "+254",
+    usd: 0.0077,
     name: "Kenya",
     flag: "🇰🇪",
     region: "East Africa",
@@ -180,6 +194,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "UG",
+    dial: "+256",
+    usd: 0.00027,
     name: "Uganda",
     flag: "🇺🇬",
     region: "East Africa",
@@ -205,6 +221,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "TZ",
+    dial: "+255",
+    usd: 0.00038,
     name: "Tanzania",
     flag: "🇹🇿",
     region: "East Africa",
@@ -231,6 +249,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "RW",
+    dial: "+250",
+    usd: 0.00072,
     name: "Rwanda",
     flag: "🇷🇼",
     region: "East Africa",
@@ -256,6 +276,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "ZA",
+    dial: "+27",
+    usd: 0.055,
     name: "South Africa",
     flag: "🇿🇦",
     region: "Southern Africa",
@@ -283,6 +305,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "ZM",
+    dial: "+260",
+    usd: 0.037,
     name: "Zambia",
     flag: "🇿🇲",
     region: "Southern Africa",
@@ -309,6 +333,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "EG",
+    dial: "+20",
+    usd: 0.021,
     name: "Egypt",
     flag: "🇪🇬",
     region: "North Africa",
@@ -336,6 +362,8 @@ export const COUNTRIES: Country[] = [
   },
   {
     code: "MA",
+    dial: "+212",
+    usd: 0.1,
     name: "Morocco",
     flag: "🇲🇦",
     region: "North Africa",
@@ -360,9 +388,72 @@ export const COUNTRIES: Country[] = [
       daily: "Sell 15–20 bundles daily = DH 500+ daily profit!",
     },
   },
+  {
+    code: "CM",
+    dial: "+237",
+    usd: 0.0016,
+    name: "Cameroon",
+    flag: "🇨🇲",
+    region: "West Africa",
+    currency: "XAF",
+    symbol: "FCFA",
+    base: 900,
+    round: 50,
+    networks: [
+      n("mtn", "MTN Cameroon", "MTN", "mtn"),
+      n("orange", "Orange Cameroun", "Orange", "orange"),
+      n("camtel", "Camtel Blue", "Camtel", "at"),
+    ],
+    momo: [
+      { label: "MTN MoMo", value: "FastData · 67 366 0497" },
+      { label: "Orange Money", value: "FastData · 69 366 0497" },
+    ],
+    vendor: {
+      starter: 15000,
+      vip: 30000,
+      starterIncome: "FCFA 180,000 – FCFA 300,000",
+      vipIncome: "FCFA 450,000+",
+      daily: "Sell 15–20 bundles daily = FCFA 18,000+ daily profit!",
+    },
+  },
+  {
+    code: "GLOBAL",
+    dial: "+1",
+    usd: 1,
+    name: "Global / Other",
+    flag: "🌍",
+    region: "Global",
+    currency: "USD",
+    symbol: "$",
+    base: 0.5,
+    round: 0.5,
+    networks: [
+      n("mtn", "MTN Group", "MTN", "mtn"),
+      n("airtel", "Airtel Africa", "Airtel", "airtel"),
+      n("orange", "Orange Group", "Orange", "orange"),
+      n("other", "Other carrier", "Other", "at"),
+    ],
+    momo: [
+      { label: "Paystack (card / transfer)", value: "FastData Africa" },
+      { label: "WhatsApp support", value: "+233 50 366 0497" },
+    ],
+    vendor: {
+      starter: 5,
+      vip: 10,
+      starterIncome: "$ 120 – $ 220",
+      vipIncome: "$ 350+",
+      daily: "Sell 15–20 bundles daily = $ 12+ daily profit!",
+    },
+  },
 ];
 
-export const REGIONS = ["West Africa", "East Africa", "Southern Africa", "North Africa"] as const;
+export const REGIONS = [
+  "West Africa",
+  "East Africa",
+  "Southern Africa",
+  "North Africa",
+  "Global",
+] as const;
 
 export const SIZES = ["1GB", "3GB", "5GB", "10GB", "20GB", "50GB", "100GB"] as const;
 
@@ -388,8 +479,19 @@ export const bundlesFor = (country: Country, networkIndex = 0): Bundle[] => {
   });
 };
 
+const decimalsFor = (country: Country) => (country.round < 1 ? 2 : 0);
+
 export const formatMoney = (country: Country, amount: number) =>
-  `${country.symbol} ${amount.toLocaleString("en-US")}`;
+  `${country.symbol} ${amount.toLocaleString("en-US", {
+    minimumFractionDigits: decimalsFor(country),
+    maximumFractionDigits: decimalsFor(country),
+  })}`;
+
+/** approximate USD value of an amount in the country currency */
+export const toUsd = (country: Country, amount: number) => amount * country.usd;
+
+export const formatUsd = (amount: number) =>
+  `$ ${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export const waLink = (message: string) =>
   `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message.slice(0, 900))}`;
