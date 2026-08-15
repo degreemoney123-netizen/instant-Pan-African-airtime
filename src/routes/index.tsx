@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { OrderDialog } from "@/components/OrderDialog";
 import { VendorSection } from "@/components/VendorSection";
-import { CountrySelect } from "@/components/CountrySelect";
+import { CountryRegionBar } from "@/components/CountryRegionBar";
 import { OrderTracker } from "@/components/OrderTracker";
 import { UtilitySection } from "@/components/UtilitySection";
 import { SalesTicker } from "@/components/SalesTicker";
