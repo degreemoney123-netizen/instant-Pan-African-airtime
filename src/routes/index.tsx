@@ -13,6 +13,9 @@ import { CountrySelect } from "@/components/CountrySelect";
 import { OrderTracker } from "@/components/OrderTracker";
 import { UtilitySection } from "@/components/UtilitySection";
 import { SalesTicker } from "@/components/SalesTicker";
+import { TrustBadges } from "@/components/TrustBadges";
+import { Testimonials } from "@/components/Testimonials";
+import { SiteFooter } from "@/components/SiteFooter";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
 import {
   ACCENT_BG,
@@ -178,13 +181,17 @@ function Index() {
           </div>
         </section>
 
+        <TrustBadges />
+
         <UtilitySection country={country} onReceipt={setReceipt} />
 
         <OrderTracker />
 
         <VendorSection country={country} onCountryChange={changeCountry} onReceipt={setReceipt} />
 
-        <section className="px-4 pb-8">
+        <Testimonials />
+
+        <section className="mt-8 px-4 pb-8">
           <h2 className="text-xl font-bold">How it works &amp; FAQ</h2>
           <ol className="mt-3 space-y-2 text-sm text-muted-foreground">
             <li>1. Pick your country, network and bundle size.</li>
@@ -223,10 +230,7 @@ function Index() {
           </Accordion>
         </section>
 
-        <footer className="px-4 pb-10 text-center text-xs text-muted-foreground">
-          FastData Africa · Serving West, East, Southern &amp; North Africa · WhatsApp +233 50 366
-          0497
-        </footer>
+        <SiteFooter />
       </main>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-3 backdrop-blur">
