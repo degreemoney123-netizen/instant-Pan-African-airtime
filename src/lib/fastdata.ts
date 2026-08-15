@@ -432,4 +432,9 @@ export const TICKER_EVENTS = [
   "Amina from Cairo bought a 3GB Orange bundle",
   "Kofi from Tamale bought a 100GB MTN bundle",
   "Grace from Kampala registered as a VIP Vendor",
+  "Daniel in East Legon just bought a 5GB MTN bundle",
+  "Abena paid ECG Power GH₵ 50",
+  "Selorm in Ho renewed a DSTV subscription",
+  "Musa from Kano bought a 10GB MTN bundle",
+  "Adjoa in Tema paid a Ghana Water bill",
 ];
