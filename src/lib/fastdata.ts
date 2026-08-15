@@ -65,7 +65,7 @@ export const COUNTRIES: Country[] = [
     networks: [
       n("mtn", "MTN Ghana", "MTN", "mtn"),
       n("telecel", "Telecel Ghana", "Telecel", "telecel"),
-      n("at", "AT Ghana", "AT", "at"),
+      n("at", "AirtelTigo (AT)", "AirtelTigo", "at"),
     ],
     momo: [
       { label: "MTN MoMo Merchant", value: "FastData · 050 366 0497" },
