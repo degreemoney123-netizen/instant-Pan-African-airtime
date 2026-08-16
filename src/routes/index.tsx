@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -75,6 +75,12 @@ function Index() {
             >
               Track order
             </a>
+            <Link
+              to="/dashboard"
+              className="rounded-full border border-primary-foreground/30 px-3 py-1 text-xs font-bold"
+            >
+              Dashboard
+            </Link>
             <span className="animate-pulse rounded-full bg-whatsapp px-3 py-1 text-xs font-bold text-whatsapp-foreground">
               Automated Delivery
             </span>
