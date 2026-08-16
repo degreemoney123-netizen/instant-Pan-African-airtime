@@ -60,18 +60,18 @@ const CATEGORIES = [
 ];
 
 const CAT_COLORS = [
-  "hsl(var(--mtn))",
-  "hsl(var(--at))",
-  "hsl(var(--telecel))",
-  "hsl(var(--whatsapp))",
-  "hsl(var(--primary))",
+  "var(--mtn)",
+  "var(--at)",
+  "var(--telecel)",
+  "var(--whatsapp)",
+  "var(--primary)",
 ];
 
 function DashboardPage() {
   const [country, setCountry] = useState<Country>(COUNTRIES[0] as Country);
   const [range, setRange] = useState<3 | 7>(7);
 
-  const rate = country.usd ?? 1;
+  const rate = 0.083 / (country.usd || 0.083);
 
   const rows = useMemo(() => {
     const slice = BASE.slice(BASE.length - range);
@@ -140,7 +140,7 @@ function DashboardPage() {
             utility sales.
           </p>
           <div className="mt-4">
-            <CountrySelect country={country} onChange={setCountry} />
+            <CountrySelect value={country} onChange={setCountry} />
           </div>
         </div>
       </header>
@@ -179,25 +179,25 @@ function DashboardPage() {
           <div className="mt-3 h-56 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={rows} margin={{ left: -18, right: 6, top: 6 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="month" fontSize={11} stroke="hsl(var(--muted-foreground))" />
-                <YAxis fontSize={10} stroke="hsl(var(--muted-foreground))" width={52} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="month" fontSize={11} stroke="var(--muted-foreground)" />
+                <YAxis fontSize={10} stroke="var(--muted-foreground)" width={52} />
                 <Tooltip formatter={(v: number) => money(Number(v))} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
                 <Area
                   type="monotone"
                   dataKey="gross"
                   name="Gross"
-                  stroke="hsl(var(--primary))"
-                  fill="hsl(var(--primary))"
+                  stroke="var(--primary)"
+                  fill="var(--primary)"
                   fillOpacity={0.18}
                 />
                 <Area
                   type="monotone"
                   dataKey="net"
                   name="Net profit"
-                  stroke="hsl(var(--whatsapp))"
-                  fill="hsl(var(--whatsapp))"
+                  stroke="var(--whatsapp)"
+                  fill="var(--whatsapp)"
                   fillOpacity={0.22}
                 />
               </AreaChart>
@@ -210,11 +210,11 @@ function DashboardPage() {
           <div className="mt-3 h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={rows} margin={{ left: -18, right: 6, top: 6 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="month" fontSize={11} stroke="hsl(var(--muted-foreground))" />
-                <YAxis fontSize={10} stroke="hsl(var(--muted-foreground))" width={52} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="month" fontSize={11} stroke="var(--muted-foreground)" />
+                <YAxis fontSize={10} stroke="var(--muted-foreground)" width={52} />
                 <Tooltip formatter={(v: number) => money(Number(v))} />
-                <Bar dataKey="payouts" name="Payouts" fill="hsl(var(--mtn))" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="payouts" name="Payouts" fill="var(--mtn)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -225,15 +225,15 @@ function DashboardPage() {
           <div className="mt-3 h-40 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={rows} margin={{ left: -18, right: 6, top: 6 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="month" fontSize={11} stroke="hsl(var(--muted-foreground))" />
-                <YAxis fontSize={10} stroke="hsl(var(--muted-foreground))" width={44} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="month" fontSize={11} stroke="var(--muted-foreground)" />
+                <YAxis fontSize={10} stroke="var(--muted-foreground)" width={44} />
                 <Tooltip />
                 <Line
                   type="monotone"
                   dataKey="txns"
                   name="Transactions"
-                  stroke="hsl(var(--at))"
+                  stroke="var(--at)"
                   strokeWidth={2}
                   dot={false}
                 />
