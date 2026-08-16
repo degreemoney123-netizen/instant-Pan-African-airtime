@@ -40,6 +40,9 @@ export function SiteFooter() {
         <Link to="/refunds" className="rounded-full bg-secondary px-3 py-1.5">
           Refund Policy
         </Link>
+        <Link to="/dashboard" className="rounded-full bg-secondary px-3 py-1.5">
+          Merchant Dashboard
+        </Link>
       </nav>
 
       <p className="mt-5 text-center text-[11px] text-muted-foreground">
