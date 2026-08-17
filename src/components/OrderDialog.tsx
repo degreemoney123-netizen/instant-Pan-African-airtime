@@ -180,14 +180,26 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
                 <span className="font-bold">
                   {bundle ? formatMoney(country, bundle.price) : ""}
                 </span>{" "}
-                · Reference: <span className="font-bold">{phone.replace(/[\s-]/g, "")}</span>
+                · Reference: <span className="font-bold">{reference}</span>
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Use this exact reference when paying — payment is confirmed automatically.
               </p>
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Step 2 — Send your payment screenshot on WhatsApp. Delivery is automated and usually
-              instant.
+              Step 2 — Once your payment clears, your order is verified automatically and marked
+              Paid &amp; Processing. No manual confirmation needed.
             </p>
+
+            {reference ? (
+              <Button asChild variant="outline" className="h-12 w-full">
+                <Link to="/order/success" search={{ reference }}>
+                  Track payment confirmation
+                </Link>
+              </Button>
+            ) : null}
+
 
             <Button asChild variant="whatsapp" className="h-14 w-full text-base">
               <a href={waLink(message ?? "")} target="_blank" rel="noopener noreferrer">
