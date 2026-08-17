@@ -540,3 +540,74 @@ export const TICKER_EVENTS = [
   "Musa from Kano bought a 10GB MTN bundle",
   "Adjoa in Tema paid a Ghana Water bill",
 ];
+
+/** Ghana mobile prefixes mapped to the local network id. */
+export const GH_PREFIX_NETWORK: Record<string, "mtn" | "telecel" | "at"> = {
+  "024": "mtn",
+  "025": "mtn",
+  "053": "mtn",
+  "054": "mtn",
+  "055": "mtn",
+  "059": "mtn",
+  "020": "telecel",
+  "050": "telecel",
+  "026": "at",
+  "027": "at",
+  "056": "at",
+  "057": "at",
+};
+
+/** Normalises +233 / 233 / 0XX input to the local 0XXXXXXXXX form. */
+export const normalizePhone = (value: string, country: Country) => {
+  let v = value.replace(/[^\d+]/g, "");
+  const dial = country.dial.replace("+", "");
+  if (v.startsWith("+")) v = v.slice(1);
+  if (v.startsWith(dial)) v = v.slice(dial.length);
+  if (!v.startsWith("0")) v = `0${v}`;
+  return v;
+};
+
+/** Auto-detects the network from a Ghanaian number; null when unknown. */
+export const detectNetwork = (value: string, country: Country): string | null => {
+  if (country.code !== "GH") return null;
+  const local = normalizePhone(value, country);
+  if (local.length < 4) return null;
+  return GH_PREFIX_NETWORK[local.slice(0, 3)] ?? null;
+};
+
+/** Ghana numbers must be 10 digits with a known prefix; others use a loose check. */
+export const isValidLocalPhone = (value: string, country: Country) => {
+  const local = normalizePhone(value, country);
+  if (country.code === "GH") return /^0\d{9}$/.test(local) && !!GH_PREFIX_NETWORK[local.slice(0, 3)];
+  return /^0\d{7,13}$/.test(local);
+};
+
+export type PaymentMethodId = "paystack" | "momo" | "wallet";
+
+export const PAYMENT_METHODS: { id: PaymentMethodId; name: string; blurb: string; icon: string }[] =
+  [
+    { id: "paystack", name: "Paystack (Card / MoMo)", blurb: "Instant, automatically verified", icon: "💳" },
+    { id: "momo", name: "Direct MoMo transfer", blurb: "Send to our merchant number", icon: "📱" },
+    { id: "wallet", name: "Agent wallet balance", blurb: "For registered agents only", icon: "👛" },
+  ];
+
+/** Wholesale (agent) price — bulk discount off the retail price. */
+export const AGENT_DISCOUNT = 0.18;
+export const agentPrice = (country: Country, price: number) =>
+  Math.max(country.round, Math.round((price * (1 - AGENT_DISCOUNT)) / country.round) * country.round);
+
+export const TRACK_STEPS = [
+  "Order Placed",
+  "Payment Verified",
+  "Processing with Telco",
+  "Bundle Delivered",
+] as const;
+
+/** How far along the timeline a stored order status is (0-based index). */
+export const stepIndexForStatus = (status: string) => {
+  const s = status.toLowerCase();
+  if (s.includes("deliver")) return 3;
+  if (s.includes("processing") || s.includes("paid")) return 2;
+  if (s.includes("verified")) return 1;
+  return 0;
+};
