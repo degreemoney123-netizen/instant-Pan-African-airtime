@@ -41,35 +41,61 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [netId, setNetId] = useState(network.id);
   const [error, setError] = useState("");
   const [step, setStep] = useState<"form" | "pay">("form");
+  const [reference, setReference] = useState("");
+  const [saving, setSaving] = useState(false);
+  const createOrder = useServerFn(createPendingOrder);
 
   useEffect(() => {
     if (open) {
       setNetId(network.id);
       setStep("form");
       setError("");
+      setReference("");
     }
   }, [open, network.id]);
 
   const active = country.networks.find((x) => x.id === netId) ?? network;
 
-  const submit = () => {
+  const submit = async () => {
     const clean = phone.replace(/[\s-]/g, "");
     if (!isValidPhone(clean)) {
       setError("Enter a valid mobile number for " + country.name);
       return;
     }
+    if (!bundle) return;
     setError("");
-    setStep("pay");
-    if (bundle) {
-      onReceipt({
-        orderId: makeOrderId("FD", clean),
-        recipient: clean,
-        item: `${bundle.size} ${active.short} Non-Expiry`,
-        amount: formatMoney(country, bundle.price),
-        country: `${country.flag} ${country.name}`,
-        date: new Date().toLocaleString(),
+    setSaving(true);
+    const orderId = makeOrderId("FD", clean);
+    const item = `${bundle.size} ${active.short} Non-Expiry`;
+
+    try {
+      const res = await createOrder({
+        data: {
+          orderId,
+          recipient: clean,
+          item,
+          amount: bundle.price,
+          currency: country.currency,
+          country: `${country.flag} ${country.name}`,
+        },
       });
+      setReference(res.reference);
+    } catch {
+      setError("We could not start this order. Please try again.");
+      setSaving(false);
+      return;
     }
+
+    setSaving(false);
+    setStep("pay");
+    onReceipt({
+      orderId,
+      recipient: clean,
+      item,
+      amount: formatMoney(country, bundle.price),
+      country: `${country.flag} ${country.name}`,
+      date: new Date().toLocaleString(),
+    });
   };
 
   const message =
