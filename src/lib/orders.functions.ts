@@ -57,3 +57,22 @@ export const getOrderByReference = createServerFn({ method: "GET" })
     const masked = row.recipient.replace(/^(\d{3})\d+(\d{2})$/, "$1•••••$2");
     return { ...row, recipient: masked };
   });
+
+/** Order history for a recipient number, used by the public order tracker. */
+export const getOrdersByRecipient = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z.object({ recipient: z.string().min(6).max(20) }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: rows, error } = await supabaseAdmin
+      .from("orders")
+      .select("reference, order_id, item, amount, currency, country, status, paid_at, created_at")
+      .eq("recipient", data.recipient)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    if (error) throw new Error("Could not load orders");
+    return rows ?? [];
+  });
