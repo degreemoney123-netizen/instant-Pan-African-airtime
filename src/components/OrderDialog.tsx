@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { createPendingOrder } from "@/lib/orders.functions";
 import {
   Dialog,
   DialogContent,
@@ -41,40 +44,66 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [netId, setNetId] = useState(network.id);
   const [error, setError] = useState("");
   const [step, setStep] = useState<"form" | "pay">("form");
+  const [reference, setReference] = useState("");
+  const [saving, setSaving] = useState(false);
+  const createOrder = useServerFn(createPendingOrder);
 
   useEffect(() => {
     if (open) {
       setNetId(network.id);
       setStep("form");
       setError("");
+      setReference("");
     }
   }, [open, network.id]);
 
   const active = country.networks.find((x) => x.id === netId) ?? network;
 
-  const submit = () => {
+  const submit = async () => {
     const clean = phone.replace(/[\s-]/g, "");
     if (!isValidPhone(clean)) {
       setError("Enter a valid mobile number for " + country.name);
       return;
     }
+    if (!bundle) return;
     setError("");
-    setStep("pay");
-    if (bundle) {
-      onReceipt({
-        orderId: makeOrderId("FD", clean),
-        recipient: clean,
-        item: `${bundle.size} ${active.short} Non-Expiry`,
-        amount: formatMoney(country, bundle.price),
-        country: `${country.flag} ${country.name}`,
-        date: new Date().toLocaleString(),
+    setSaving(true);
+    const orderId = makeOrderId("FD", clean);
+    const item = `${bundle.size} ${active.short} Non-Expiry`;
+
+    try {
+      const res = await createOrder({
+        data: {
+          orderId,
+          recipient: clean,
+          item,
+          amount: bundle.price,
+          currency: country.currency,
+          country: `${country.flag} ${country.name}`,
+        },
       });
+      setReference(res.reference);
+    } catch {
+      setError("We could not start this order. Please try again.");
+      setSaving(false);
+      return;
     }
+
+    setSaving(false);
+    setStep("pay");
+    onReceipt({
+      orderId,
+      recipient: clean,
+      item,
+      amount: formatMoney(country, bundle.price),
+      country: `${country.flag} ${country.name}`,
+      date: new Date().toLocaleString(),
+    });
   };
 
   const message =
     bundle &&
-    `Hello! I want to buy ${bundle.size} ${active.short} (${country.name} ${country.flag}) for ${formatMoney(country, bundle.price)}. Send to Phone Number: ${phone.replace(/[\s-]/g, "")}`;
+    `Hello! I want to buy ${bundle.size} ${active.short} (${country.name} ${country.flag}) for ${formatMoney(country, bundle.price)}. Send to Phone Number: ${phone.replace(/[\s-]/g, "")}. Payment reference: ${reference}`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -128,8 +157,8 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               </div>
             </div>
 
-            <Button className="h-12 w-full text-base" onClick={submit}>
-              Continue to payment
+            <Button className="h-12 w-full text-base" onClick={submit} disabled={saving}>
+              {saving ? "Creating order…" : "Continue to payment"}
             </Button>
           </div>
         ) : (
@@ -151,14 +180,26 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
                 <span className="font-bold">
                   {bundle ? formatMoney(country, bundle.price) : ""}
                 </span>{" "}
-                · Reference: <span className="font-bold">{phone.replace(/[\s-]/g, "")}</span>
+                · Reference: <span className="font-bold">{reference}</span>
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Use this exact reference when paying — payment is confirmed automatically.
               </p>
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Step 2 — Send your payment screenshot on WhatsApp. Delivery is automated and usually
-              instant.
+              Step 2 — Once your payment clears, your order is verified automatically and marked
+              Paid &amp; Processing. No manual confirmation needed.
             </p>
+
+            {reference ? (
+              <Button asChild variant="outline" className="h-12 w-full">
+                <Link to="/order/success" search={{ reference }}>
+                  Track payment confirmation
+                </Link>
+              </Button>
+            ) : null}
+
 
             <Button asChild variant="whatsapp" className="h-14 w-full text-base">
               <a href={waLink(message ?? "")} target="_blank" rel="noopener noreferrer">

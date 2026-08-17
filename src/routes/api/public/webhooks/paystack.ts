@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
+import type { Json } from "@/integrations/supabase/types";
 
 type PaystackEvent = {
   event?: string;
@@ -71,7 +72,7 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
             status: "Paid & Processing",
             paid_at: payload.data?.paid_at ?? new Date().toISOString(),
             customer_email: payload.data?.customer?.email ?? null,
-            provider_event: payload as unknown as Record<string, unknown>,
+            provider_event: payload as unknown as Json,
           })
           .eq("id", order.id);
 
