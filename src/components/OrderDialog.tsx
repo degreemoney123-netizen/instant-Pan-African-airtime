@@ -103,7 +103,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
 
   const message =
     bundle &&
-    `Hello! I want to buy ${bundle.size} ${active.short} (${country.name} ${country.flag}) for ${formatMoney(country, bundle.price)}. Send to Phone Number: ${phone.replace(/[\s-]/g, "")}`;
+    `Hello! I want to buy ${bundle.size} ${active.short} (${country.name} ${country.flag}) for ${formatMoney(country, bundle.price)}. Send to Phone Number: ${phone.replace(/[\s-]/g, "")}. Payment reference: ${reference}`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
