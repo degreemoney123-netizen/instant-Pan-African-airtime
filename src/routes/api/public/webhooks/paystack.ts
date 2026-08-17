@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
+import type { Json } from "@/integrations/supabase/types";
 
 type PaystackEvent = {
   event?: string;
