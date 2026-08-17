@@ -157,8 +157,8 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               </div>
             </div>
 
-            <Button className="h-12 w-full text-base" onClick={submit}>
-              Continue to payment
+            <Button className="h-12 w-full text-base" onClick={submit} disabled={saving}>
+              {saving ? "Creating order…" : "Continue to payment"}
             </Button>
           </div>
         ) : (
