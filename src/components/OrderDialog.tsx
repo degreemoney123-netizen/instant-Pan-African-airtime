@@ -145,16 +145,9 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
           },
         });
         setReference(res.reference);
+        setOrderIdValue(orderId);
         setStep(3);
         toast.success("Order created — complete payment to confirm");
-        onReceipt({
-          orderId,
-          recipient: local,
-          item,
-          amount: formatMoney(country, bundle.price),
-          country: `${country.flag} ${country.name}`,
-          date: new Date().toLocaleString(),
-        });
       } catch {
         setError("We could not start this order. Please try again.");
         toast.error("Could not create the order");
