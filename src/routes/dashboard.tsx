@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { COUNTRIES, formatMoney, type Country } from "@/lib/fastdata";
 import { CountrySelect } from "@/components/CountrySelect";
+import { AgentPortal } from "@/components/AgentPortal";
 import { SiteFooter } from "@/components/SiteFooter";
 
 const title = "Merchant Analytics Dashboard — FastData Africa";
