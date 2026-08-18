@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { COUNTRIES, formatMoney, type Country } from "@/lib/fastdata";
 import { CountrySelect } from "@/components/CountrySelect";
+import { AgentPortal } from "@/components/AgentPortal";
 import { SiteFooter } from "@/components/SiteFooter";
 
 const title = "Merchant Analytics Dashboard — FastData Africa";
@@ -146,6 +147,11 @@ function DashboardPage() {
       </header>
 
       <main className="mx-auto -mt-6 max-w-md px-4">
+        <div className="mb-8">
+          <AgentPortal country={country} />
+        </div>
+
+        <h2 className="mb-3 text-xl font-bold">Merchant analytics</h2>
         <div className="flex gap-2 rounded-2xl bg-card p-2 shadow-card">
           {([3, 7] as const).map((r) => (
             <button
