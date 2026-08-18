@@ -88,6 +88,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [error, setError] = useState("");
   const [step, setStep] = useState<Step>(1);
   const [reference, setReference] = useState("");
+  const [orderIdValue, setOrderIdValue] = useState("");
   const [saving, setSaving] = useState(false);
   const createOrder = useServerFn(createPendingOrder);
 
@@ -97,6 +98,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
       setStep(1);
       setError("");
       setReference("");
+      setOrderIdValue("");
       setMethod("paystack");
       setAutoDetected(false);
     }
@@ -352,6 +354,24 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               <a href={waLink(message ?? "")} target="_blank" rel="noopener noreferrer">
                 Complete Order on WhatsApp
               </a>
+            </Button>
+
+            <Button
+              variant="outline"
+              className="h-11 w-full"
+              onClick={() => {
+                onOpenChange(false);
+                onReceipt({
+                  orderId: orderIdValue,
+                  recipient: local,
+                  item,
+                  amount: bundle ? formatMoney(country, bundle.price) : "",
+                  country: `${country.flag} ${country.name}`,
+                  date: new Date().toLocaleString(),
+                });
+              }}
+            >
+              View digital receipt
             </Button>
 
             <Button asChild variant="outline" className="h-11 w-full">
