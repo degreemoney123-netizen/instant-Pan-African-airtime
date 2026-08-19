@@ -82,10 +82,9 @@ export function AgentPortal({ country }: { country: Country }) {
   );
 
   const wholesale = useMemo(() => bundlesFor(country, 0).slice(0, 6), [country]);
-  const referral =
-    typeof window === "undefined"
-      ? `https://fastdataafrica.com/?ref=${agentCode}`
-      : `${window.location.origin}/?ref=${agentCode}`;
+  const [origin, setOrigin] = useState("https://fastdataafrica.com");
+  useEffect(() => setOrigin(window.location.origin), []);
+  const referral = `${origin}/?ref=${agentCode}`;
 
   const copyReferral = async () => {
     try {
