@@ -29,9 +29,18 @@ export function ContactForm({ onSent }: { onSent?: () => void }) {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().length < 2) return toast.error("Please enter your name.");
-    if (contact.trim().length < 5) return toast.error("Enter a valid email or phone number.");
-    if (message.trim().length < 10) return toast.error("Please describe your issue (10+ characters).");
+    if (name.trim().length < 2) {
+      toast.error("Please enter your name.");
+      return;
+    }
+    if (contact.trim().length < 5) {
+      toast.error("Enter a valid email or phone number.");
+      return;
+    }
+    if (message.trim().length < 10) {
+      toast.error("Please describe your issue (10+ characters).");
+      return;
+    }
 
     const body = `Name: ${name}\nContact: ${contact}\nIssue: ${issue}\n\n${message}`;
     window.open(waLink(`Support request — FastData Africa\n\n${body}`), "_blank", "noopener");
