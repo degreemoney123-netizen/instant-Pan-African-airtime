@@ -238,19 +238,10 @@ function Index() {
         <SiteFooter />
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 p-3 backdrop-blur">
-        <Button asChild variant="whatsapp" className="mx-auto flex h-14 w-full max-w-md text-base">
-          <a
-            href={waLink(
-              `Hello FastData Africa! I need help with a data bundle order in ${country.name}.`,
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Chat with Support on WhatsApp
-          </a>
-        </Button>
-      </div>
+      <SupportBar
+        context={`Hello FastData Africa! I need help with a data bundle order in ${country.name}.`}
+      />
+
 
       <OrderDialog
         open={open}

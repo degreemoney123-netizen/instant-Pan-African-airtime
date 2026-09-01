@@ -523,10 +523,26 @@ export const trackOrder = (phone: string): { status: OrderStatus; note: string; 
   return { status, note, ref: `FD-${(h % 900000) + 100000}` };
 };
 
+export const SUPPORT_EMAIL = "support@fastdataafrica.com";
+export const SUPPORT_PHONE = "+233 50 366 0497";
+export const SUPPORT_PHONE_ALT = "+233 30 274 1188";
+
+export const SOCIAL_LINKS = [
+  { label: "X (Twitter)", href: "https://x.com/fastdataafrica" },
+  { label: "Facebook", href: "https://facebook.com/fastdataafrica" },
+  { label: "Instagram", href: "https://instagram.com/fastdataafrica" },
+  { label: "LinkedIn", href: "https://linkedin.com/company/fastdataafrica" },
+  { label: "Telegram Community", href: "https://t.me/fastdataafrica" },
+];
+
+export const TRUST_TRANSACTIONS = 50000;
+
 export const TICKER_EVENTS = [
+  "Kofi from Kumasi just bought a 5GB MTN bundle",
   "Ama from Kumasi bought a 10GB MTN bundle",
   "Kweku from Takoradi registered as a VIP Vendor",
   "Chidi from Lagos bought a 20GB Airtel bundle",
+  "Amina from Nairobi bought KES 500 airtime",
   "Njeri from Nairobi bought a 5GB Safaricom bundle",
   "Yaw from Accra bought a 50GB Telecel bundle",
   "Fatou from Dakar registered as a Starter Agent",
@@ -539,7 +555,13 @@ export const TICKER_EVENTS = [
   "Selorm in Ho renewed a DSTV subscription",
   "Musa from Kano bought a 10GB MTN bundle",
   "Adjoa in Tema paid a Ghana Water bill",
+  "Aïcha from Abidjan bought a 3GB Orange bundle",
+  "Sipho from Cape Town bought a 20GB MTN bundle",
+  "Brian from Kigali bought a 2GB Airtel bundle",
+  "Zainab from Abuja topped up ₦ 2,000 airtime",
+  "Joseph from Dar es Salaam bought a 10GB Vodacom bundle",
 ];
+
 
 /** Ghana mobile prefixes mapped to the local network id. */
 export const GH_PREFIX_NETWORK: Record<string, "mtn" | "telecel" | "at"> = {
