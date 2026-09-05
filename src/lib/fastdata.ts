@@ -68,8 +68,8 @@ export const COUNTRIES: Country[] = [
       n("at", "AirtelTigo (AT)", "AirtelTigo", "at"),
     ],
     momo: [
-      { label: "MTN MoMo Merchant", value: "FastData · 050 366 0497" },
-      { label: "Telecel Cash", value: "FastData · 050 366 0497" },
+      { label: "MTN MoMo Merchant", value: "FastData · +233 503660497" },
+      { label: "Telecel Cash", value: "FastData · +233 503660497" },
     ],
     vendor: {
       starter: 50,
@@ -435,7 +435,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Paystack (card / transfer)", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 50 366 0497" },
+      { label: "WhatsApp support", value: "+233 503660497" },
     ],
     vendor: {
       starter: 5,
@@ -524,7 +524,7 @@ export const trackOrder = (phone: string): { status: OrderStatus; note: string; 
 };
 
 export const SUPPORT_EMAIL = "support@fastdataafrica.com";
-export const SUPPORT_PHONE = "+233 50 366 0497";
+export const SUPPORT_PHONE = "+233 503660497";
 export const SUPPORT_PHONE_ALT = "+233 30 274 1188";
 
 export const SOCIAL_LINKS = [
