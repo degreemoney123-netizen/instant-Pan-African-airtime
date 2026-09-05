@@ -56,7 +56,7 @@ export function ReceiptModal({
 
             <Button asChild variant="whatsapp" className="h-14 w-full text-base">
               <a href={waLink(message)} target="_blank" rel="noopener noreferrer">
-                Send Receipt to WhatsApp (+233 50 366 0497)
+                Send Receipt to WhatsApp (+233 503660497)
               </a>
             </Button>
           </div>

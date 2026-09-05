@@ -41,7 +41,7 @@ function Refunds() {
         },
         {
           heading: "How to request a refund",
-          body: "Send your Order ID, recipient number and payment receipt to WhatsApp +233 50 366 0497 or support@fastdataafrica.com. Refund decisions are communicated within 24 hours.",
+          body: "Send your Order ID, recipient number and payment receipt to WhatsApp +233 503660497 or support@fastdataafrica.com. Refund decisions are communicated within 24 hours.",
         },
       ]}
     />
