@@ -16,6 +16,7 @@ import { SalesTicker } from "@/components/SalesTicker";
 import { TrustBadges } from "@/components/TrustBadges";
 import { Testimonials } from "@/components/Testimonials";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SupportBar } from "@/components/SupportBar";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
 import {
   ACCENT_BG,
