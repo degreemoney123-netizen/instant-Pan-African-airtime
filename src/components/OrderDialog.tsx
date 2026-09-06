@@ -358,20 +358,30 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               </div>
             ) : null}
 
-            {method === "paystack" ? (
-              <Button
-                className="h-12 w-full text-base"
-                onClick={() => {
-                  toast.success("Redirecting to secure Paystack checkout…");
-                  window.open(
-                    `https://paystack.com/pay/fastdata?reference=${encodeURIComponent(reference)}`,
-                    "_blank",
-                    "noopener,noreferrer",
-                  );
-                }}
-              >
-                Pay {bundle ? formatMoney(country, bundle.price) : ""} with Paystack
-              </Button>
+            {method === "paystack" && charge ? (
+              <div className="space-y-2">
+                <Button
+                  className="h-12 w-full text-base"
+                  disabled={paying}
+                  onClick={() => void payWithPaystack()}
+                >
+                  {paying ? "Opening secure checkout…" : `Pay ${charge.display} with Paystack`}
+                </Button>
+                {charge.converted ? (
+                  <p className="text-xs text-muted-foreground">
+                    {country.currency} is not charged directly by Paystack — your{" "}
+                    {charge.localDisplay} order is converted to USD ({charge.display}) at an
+                    indicative rate. International Visa / Mastercard accepted.
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Charged in {charge.currency}.{" "}
+                    {charge.channels.includes("mobile_money")
+                      ? "Pay with Mobile Money or card."
+                      : "Visa / Mastercard accepted."}
+                  </p>
+                )}
+              </div>
             ) : null}
 
             {method === "wallet" ? (
