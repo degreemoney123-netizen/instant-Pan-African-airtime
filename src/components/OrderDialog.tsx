@@ -110,6 +110,36 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const active = country.networks.find((x) => x.id === netId) ?? network;
   const local = useMemo(() => normalizePhone(phone, country), [phone, country]);
   const item = bundle ? `${bundle.size} ${active.short} Non-Expiry` : "";
+  const charge = bundle ? paystackCharge(country, bundle.price) : null;
+
+  const payWithPaystack = async () => {
+    if (!bundle || !charge || !reference) return;
+    setPaying(true);
+    try {
+      await openPaystackCheckout({
+        charge,
+        reference,
+        email: `customer+${reference.toLowerCase()}@fastdataafrica.com`,
+        metadata: {
+          order_id: orderIdValue,
+          recipient: local,
+          item,
+          country: country.name,
+          local_amount: charge.localDisplay,
+        },
+        onSuccess: (ref) => {
+          toast.success("Payment confirmed — your bundle is being processed");
+          onOpenChange(false);
+          void navigate({ to: "/order/success", search: { reference: ref } });
+        },
+        onClose: () => toast.info("Checkout closed — your order is saved for later payment"),
+      });
+    } catch {
+      toast.error("Could not open Paystack checkout. Please try again.");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const onPhoneChange = (value: string) => {
     setPhone(value);
