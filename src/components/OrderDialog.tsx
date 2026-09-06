@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Check, Copy } from "lucide-react";
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createPendingOrder } from "@/lib/orders.functions";
+import { openPaystackCheckout, paystackCharge } from "@/lib/paystack";
 import {
   ACCENT_BG,
   PAYMENT_METHODS,
@@ -90,6 +91,8 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [reference, setReference] = useState("");
   const [orderIdValue, setOrderIdValue] = useState("");
   const [saving, setSaving] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const navigate = useNavigate();
   const createOrder = useServerFn(createPendingOrder);
 
   useEffect(() => {
@@ -107,6 +110,36 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const active = country.networks.find((x) => x.id === netId) ?? network;
   const local = useMemo(() => normalizePhone(phone, country), [phone, country]);
   const item = bundle ? `${bundle.size} ${active.short} Non-Expiry` : "";
+  const charge = bundle ? paystackCharge(country, bundle.price) : null;
+
+  const payWithPaystack = async () => {
+    if (!bundle || !charge || !reference) return;
+    setPaying(true);
+    try {
+      await openPaystackCheckout({
+        charge,
+        reference,
+        email: `customer+${reference.toLowerCase()}@fastdataafrica.com`,
+        metadata: {
+          order_id: orderIdValue,
+          recipient: local,
+          item,
+          country: country.name,
+          local_amount: charge.localDisplay,
+        },
+        onSuccess: (ref) => {
+          toast.success("Payment confirmed — your bundle is being processed");
+          onOpenChange(false);
+          void navigate({ to: "/order/success", search: { reference: ref } });
+        },
+        onClose: () => toast.info("Checkout closed — your order is saved for later payment"),
+      });
+    } catch {
+      toast.error("Could not open Paystack checkout. Please try again.");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   const onPhoneChange = (value: string) => {
     setPhone(value);
@@ -325,20 +358,30 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               </div>
             ) : null}
 
-            {method === "paystack" ? (
-              <Button
-                className="h-12 w-full text-base"
-                onClick={() => {
-                  toast.success("Redirecting to secure Paystack checkout…");
-                  window.open(
-                    `https://paystack.com/pay/fastdata?reference=${encodeURIComponent(reference)}`,
-                    "_blank",
-                    "noopener,noreferrer",
-                  );
-                }}
-              >
-                Pay {bundle ? formatMoney(country, bundle.price) : ""} with Paystack
-              </Button>
+            {method === "paystack" && charge ? (
+              <div className="space-y-2">
+                <Button
+                  className="h-12 w-full text-base"
+                  disabled={paying}
+                  onClick={() => void payWithPaystack()}
+                >
+                  {paying ? "Opening secure checkout…" : `Pay ${charge.display} with Paystack`}
+                </Button>
+                {charge.converted ? (
+                  <p className="text-xs text-muted-foreground">
+                    {country.currency} is not charged directly by Paystack — your{" "}
+                    {charge.localDisplay} order is converted to USD ({charge.display}) at an
+                    indicative rate. International Visa / Mastercard accepted.
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Charged in {charge.currency}.{" "}
+                    {charge.channels.includes("mobile_money")
+                      ? "Pay with Mobile Money or card."
+                      : "Visa / Mastercard accepted."}
+                  </p>
+                )}
+              </div>
             ) : null}
 
             {method === "wallet" ? (
