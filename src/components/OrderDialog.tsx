@@ -91,6 +91,8 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [reference, setReference] = useState("");
   const [orderIdValue, setOrderIdValue] = useState("");
   const [saving, setSaving] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const navigate = useNavigate();
   const createOrder = useServerFn(createPendingOrder);
 
   useEffect(() => {
