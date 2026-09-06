@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createPendingOrder } from "@/lib/orders.functions";
+import { openPaystackCheckout, paystackCharge } from "@/lib/paystack";
 import {
   ACCENT_BG,
   PAYMENT_METHODS,
