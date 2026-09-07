@@ -156,11 +156,11 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
           country: country.name,
           local_amount: charge.localDisplay,
         },
-        onSuccess: (ref) => {
+        onSuccess: () => {
           toast.success("Payment confirmed — your bundle is being processed");
-          onOpenChange(false);
-          void navigate({ to: "/order/success", search: { reference: ref } });
+          setStage(1);
         },
+
         onClose: () => toast.info("Checkout closed — your order is saved for later payment"),
       });
     } catch {
@@ -187,10 +187,19 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
         setError(`Enter a valid ${country.name} mobile number (e.g. 059XXXXXXX).`);
         return;
       }
+      if (saveFav) {
+        setFavorites(
+          addFavorite({ label: favLabel.trim() || "Saved number", number: local, network: netId }),
+        );
+        toast.success("Recipient saved for next time");
+        setSaveFav(false);
+        setFavLabel("");
+      }
       setError("");
       setStep(2);
       return;
     }
+
 
     if (step === 2) {
       if (!bundle) return;
