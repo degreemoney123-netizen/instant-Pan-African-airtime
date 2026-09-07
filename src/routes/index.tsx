@@ -19,6 +19,11 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SupportBar } from "@/components/SupportBar";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
 import {
+  BundleFilters,
+  filterBundles,
+  type BundleFilterId,
+} from "@/components/BundleFilters";
+import {
   ACCENT_BG,
   ACCENT_BUTTON,
   COUNTRIES,
@@ -51,6 +56,8 @@ function Index() {
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [open, setOpen] = useState(false);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<BundleFilterId>("all");
 
   const netIndex = Math.max(
     0,
@@ -58,6 +65,11 @@ function Index() {
   );
   const active = country.networks[netIndex]!;
   const bundles = useMemo(() => bundlesFor(country, netIndex), [country, netIndex]);
+  const visibleBundles = useMemo(
+    () => filterBundles(bundles, query, filter),
+    [bundles, query, filter],
+  );
+
 
   const changeCountry = (c: Country) => {
     setCountry(c);
@@ -133,8 +145,23 @@ function Index() {
           <p className="text-sm text-muted-foreground">
             Prices shown in {country.currency} ({country.symbol})
           </p>
+
+          <BundleFilters
+            query={query}
+            filter={filter}
+            onQueryChange={setQuery}
+            onFilterChange={setFilter}
+            placeholder={`Search e.g. 5GB, 10GB, ${country.symbol} 15`}
+          />
+
+          {visibleBundles.length === 0 ? (
+            <p className="mt-6 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+              No packages match “{query}”. Try another size or clear the filters.
+            </p>
+          ) : null}
+
           <div className="mt-4 grid grid-cols-2 gap-3">
-            {bundles.map((b) => (
+            {visibleBundles.map((b) => (
               <article
                 key={b.size}
                 className="flex flex-col rounded-2xl border border-border bg-card p-4 shadow-card"
@@ -166,6 +193,7 @@ function Index() {
               </article>
             ))}
           </div>
+
         </section>
 
         <section className="mt-8 px-4">

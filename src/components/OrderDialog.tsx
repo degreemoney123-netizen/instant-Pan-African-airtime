@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Check, Copy } from "lucide-react";
@@ -15,6 +15,15 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createPendingOrder } from "@/lib/orders.functions";
 import { openPaystackCheckout, paystackCharge } from "@/lib/paystack";
+import { FavoriteRecipients } from "@/components/FavoriteRecipients";
+import { OrderProgressTimeline } from "@/components/OrderProgressTimeline";
+import { downloadReceiptPdf } from "@/lib/receipt-pdf";
+import {
+  addFavorite,
+  loadFavorites,
+  removeFavorite,
+  type FavoriteRecipient,
+} from "@/lib/favorites";
 import {
   ACCENT_BG,
   PAYMENT_METHODS,
@@ -92,7 +101,10 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [orderIdValue, setOrderIdValue] = useState("");
   const [saving, setSaving] = useState(false);
   const [paying, setPaying] = useState(false);
-  const navigate = useNavigate();
+  const [favorites, setFavorites] = useState<FavoriteRecipient[]>([]);
+  const [saveFav, setSaveFav] = useState(false);
+  const [favLabel, setFavLabel] = useState("");
+  const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
   const createOrder = useServerFn(createPendingOrder);
 
   useEffect(() => {
@@ -104,8 +116,24 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
       setOrderIdValue("");
       setMethod("paystack");
       setAutoDetected(false);
+      setSaveFav(false);
+      setFavLabel("");
+      setStage(0);
+      setFavorites(loadFavorites());
     }
   }, [open, network.id]);
+
+  // Simulated live progress once the order is confirmed and paid.
+  useEffect(() => {
+    if (stage !== 1) return;
+    const a = setTimeout(() => setStage(2), 2500);
+    const b = setTimeout(() => setStage(3), 7000);
+    return () => {
+      clearTimeout(a);
+      clearTimeout(b);
+    };
+  }, [stage]);
+
 
   const active = country.networks.find((x) => x.id === netId) ?? network;
   const local = useMemo(() => normalizePhone(phone, country), [phone, country]);
@@ -127,11 +155,11 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
           country: country.name,
           local_amount: charge.localDisplay,
         },
-        onSuccess: (ref) => {
+        onSuccess: () => {
           toast.success("Payment confirmed — your bundle is being processed");
-          onOpenChange(false);
-          void navigate({ to: "/order/success", search: { reference: ref } });
+          setStage(1);
         },
+
         onClose: () => toast.info("Checkout closed — your order is saved for later payment"),
       });
     } catch {
@@ -158,10 +186,19 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
         setError(`Enter a valid ${country.name} mobile number (e.g. 059XXXXXXX).`);
         return;
       }
+      if (saveFav) {
+        setFavorites(
+          addFavorite({ label: favLabel.trim() || "Saved number", number: local, network: netId }),
+        );
+        toast.success("Recipient saved for next time");
+        setSaveFav(false);
+        setFavLabel("");
+      }
       setError("");
       setStep(2);
       return;
     }
+
 
     if (step === 2) {
       if (!bundle) return;
@@ -219,6 +256,19 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
 
         {step === 1 ? (
           <div className="space-y-4">
+            <FavoriteRecipients
+              favorites={favorites}
+              activeNumber={local}
+              onSelect={(f) => {
+                setPhone(f.number);
+                const match = country.networks.find((x) => x.id === f.network);
+                if (match) setNetId(match.id);
+                setAutoDetected(false);
+                setError("");
+              }}
+              onRemove={(id) => setFavorites(removeFavorite(id))}
+            />
+
             <div className="space-y-2">
               <Label htmlFor="recipient">Recipient mobile number</Label>
               <div className="flex items-center gap-2">
@@ -243,6 +293,29 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               ) : null}
               {error ? <p className="text-sm text-destructive">{error}</p> : null}
             </div>
+
+            <div className="rounded-2xl border border-border bg-card p-3">
+              <label className="flex items-center gap-2 text-sm font-semibold">
+                <input
+                  type="checkbox"
+                  checked={saveFav}
+                  onChange={(e) => setSaveFav(e.target.checked)}
+                  className="size-4 accent-current"
+                />
+                Save this number for next time
+              </label>
+              {saveFav ? (
+                <Input
+                  value={favLabel}
+                  onChange={(e) => setFavLabel(e.target.value)}
+                  maxLength={20}
+                  placeholder="Label e.g. My Phone, Mom, Work"
+                  aria-label="Recipient label"
+                  className="mt-2 h-11"
+                />
+              ) : null}
+            </div>
+
 
             <div className="space-y-2">
               <Label>
@@ -341,6 +414,19 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               ))}
             </dl>
 
+            <div className="space-y-2">
+              <p className="text-sm font-bold">
+                {stage === 0
+                  ? "Awaiting payment"
+                  : stage === 3
+                    ? "Order complete"
+                    : "Order in progress"}
+              </p>
+              <OrderProgressTimeline stage={stage} />
+            </div>
+
+
+
             {method === "momo" ? (
               <div className="rounded-2xl border border-border bg-card p-4">
                 <p className="text-sm font-semibold">
@@ -398,6 +484,26 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
                 Complete Order on WhatsApp
               </a>
             </Button>
+
+            <Button
+              variant="outline"
+              className="h-12 w-full text-base"
+              onClick={() =>
+                downloadReceiptPdf({
+                  orderId: orderIdValue,
+                  recipient: local,
+                  item,
+                  amount: bundle ? formatMoney(country, bundle.price) : "",
+                  country: `${country.flag} ${country.name}`,
+                  date: new Date().toLocaleString(),
+                  reference,
+                })
+              }
+            >
+              Download PDF Receipt
+            </Button>
+
+
 
             <Button
               variant="outline"

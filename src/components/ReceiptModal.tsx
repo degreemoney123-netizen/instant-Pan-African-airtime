@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { waLink } from "@/lib/fastdata";
+import { downloadReceiptPdf } from "@/lib/receipt-pdf";
 
 export type Receipt = {
   orderId: string;
@@ -59,6 +60,15 @@ export function ReceiptModal({
                 Send Receipt to WhatsApp (+233 503660497)
               </a>
             </Button>
+
+            <Button
+              variant="outline"
+              className="h-12 w-full text-base"
+              onClick={() => downloadReceiptPdf(receipt)}
+            >
+              Download PDF Receipt
+            </Button>
+
           </div>
         ) : null}
       </DialogContent>
