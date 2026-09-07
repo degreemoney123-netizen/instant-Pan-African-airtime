@@ -19,6 +19,11 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SupportBar } from "@/components/SupportBar";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
 import {
+  BundleFilters,
+  filterBundles,
+  type BundleFilterId,
+} from "@/components/BundleFilters";
+import {
   ACCENT_BG,
   ACCENT_BUTTON,
   COUNTRIES,
@@ -51,6 +56,8 @@ function Index() {
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [open, setOpen] = useState(false);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<BundleFilterId>("all");
 
   const netIndex = Math.max(
     0,
@@ -58,6 +65,11 @@ function Index() {
   );
   const active = country.networks[netIndex]!;
   const bundles = useMemo(() => bundlesFor(country, netIndex), [country, netIndex]);
+  const visibleBundles = useMemo(
+    () => filterBundles(bundles, query, filter),
+    [bundles, query, filter],
+  );
+
 
   const changeCountry = (c: Country) => {
     setCountry(c);
