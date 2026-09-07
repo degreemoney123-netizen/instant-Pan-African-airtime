@@ -488,6 +488,26 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
 
             <Button
               variant="outline"
+              className="h-12 w-full text-base"
+              onClick={() =>
+                downloadReceiptPdf({
+                  orderId: orderIdValue,
+                  recipient: local,
+                  item,
+                  amount: bundle ? formatMoney(country, bundle.price) : "",
+                  country: `${country.flag} ${country.name}`,
+                  date: new Date().toLocaleString(),
+                  reference,
+                })
+              }
+            >
+              Download PDF Receipt
+            </Button>
+
+
+
+            <Button
+              variant="outline"
               className="h-11 w-full"
               onClick={() => {
                 onOpenChange(false);
