@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Check, Copy } from "lucide-react";
@@ -105,7 +105,6 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [saveFav, setSaveFav] = useState(false);
   const [favLabel, setFavLabel] = useState("");
   const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
-  const navigate = useNavigate();
   const createOrder = useServerFn(createPendingOrder);
 
   useEffect(() => {
