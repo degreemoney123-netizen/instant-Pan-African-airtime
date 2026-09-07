@@ -219,6 +219,19 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
 
         {step === 1 ? (
           <div className="space-y-4">
+            <FavoriteRecipients
+              favorites={favorites}
+              activeNumber={local}
+              onSelect={(f) => {
+                setPhone(f.number);
+                const match = country.networks.find((x) => x.id === f.network);
+                if (match) setNetId(match.id);
+                setAutoDetected(false);
+                setError("");
+              }}
+              onRemove={(id) => setFavorites(removeFavorite(id))}
+            />
+
             <div className="space-y-2">
               <Label htmlFor="recipient">Recipient mobile number</Label>
               <div className="flex items-center gap-2">
@@ -243,6 +256,29 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               ) : null}
               {error ? <p className="text-sm text-destructive">{error}</p> : null}
             </div>
+
+            <div className="rounded-2xl border border-border bg-card p-3">
+              <label className="flex items-center gap-2 text-sm font-semibold">
+                <input
+                  type="checkbox"
+                  checked={saveFav}
+                  onChange={(e) => setSaveFav(e.target.checked)}
+                  className="size-4 accent-current"
+                />
+                Save this number for next time
+              </label>
+              {saveFav ? (
+                <Input
+                  value={favLabel}
+                  onChange={(e) => setFavLabel(e.target.value)}
+                  maxLength={20}
+                  placeholder="Label e.g. My Phone, Mom, Work"
+                  aria-label="Recipient label"
+                  className="mt-2 h-11"
+                />
+              ) : null}
+            </div>
+
 
             <div className="space-y-2">
               <Label>
