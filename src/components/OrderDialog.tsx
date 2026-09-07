@@ -101,6 +101,10 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [orderIdValue, setOrderIdValue] = useState("");
   const [saving, setSaving] = useState(false);
   const [paying, setPaying] = useState(false);
+  const [favorites, setFavorites] = useState<FavoriteRecipient[]>([]);
+  const [saveFav, setSaveFav] = useState(false);
+  const [favLabel, setFavLabel] = useState("");
+  const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
   const navigate = useNavigate();
   const createOrder = useServerFn(createPendingOrder);
 
@@ -113,8 +117,24 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
       setOrderIdValue("");
       setMethod("paystack");
       setAutoDetected(false);
+      setSaveFav(false);
+      setFavLabel("");
+      setStage(0);
+      setFavorites(loadFavorites());
     }
   }, [open, network.id]);
+
+  // Simulated live progress once the order is confirmed and paid.
+  useEffect(() => {
+    if (stage !== 1) return;
+    const a = setTimeout(() => setStage(2), 2500);
+    const b = setTimeout(() => setStage(3), 7000);
+    return () => {
+      clearTimeout(a);
+      clearTimeout(b);
+    };
+  }, [stage]);
+
 
   const active = country.networks.find((x) => x.id === netId) ?? network;
   const local = useMemo(() => normalizePhone(phone, country), [phone, country]);
