@@ -415,6 +415,19 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
               ))}
             </dl>
 
+            <div className="space-y-2">
+              <p className="text-sm font-bold">
+                {stage === 0
+                  ? "Awaiting payment"
+                  : stage === 3
+                    ? "Order complete"
+                    : "Order in progress"}
+              </p>
+              <OrderProgressTimeline stage={stage} />
+            </div>
+
+
+
             {method === "momo" ? (
               <div className="rounded-2xl border border-border bg-card p-4">
                 <p className="text-sm font-semibold">
