@@ -26,7 +26,9 @@ const buttonVariants = cva(
           "bg-orange text-orange-foreground shadow-card hover:brightness-105 rounded-xl font-semibold",
         safaricom:
           "bg-safaricom text-safaricom-foreground shadow-card hover:brightness-105 rounded-xl font-semibold",
+        gold: "bg-gold text-gold-foreground shadow-card hover:brightness-105 rounded-2xl font-bold",
       },
+
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",

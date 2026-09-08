@@ -135,15 +135,15 @@ function Index() {
       </header>
 
 
-      <main className="mx-auto -mt-6 max-w-md">
-        <section className="px-4">
-          <div className="flex gap-2 overflow-x-auto rounded-2xl bg-card p-2 shadow-card">
+      <main className="mx-auto -mt-8 max-w-md">
+        <section className="px-5">
+          <div className="flex gap-2 overflow-x-auto rounded-3xl border border-border bg-card p-2 shadow-pop">
             {country.networks.map((n) => (
               <button
                 key={n.id}
                 type="button"
                 onClick={() => setNetId(n.id)}
-                className={`flex-1 whitespace-nowrap rounded-xl px-3 py-3 text-sm font-bold transition ${
+                className={`flex-1 whitespace-nowrap rounded-2xl px-3 py-3 text-sm font-bold transition ${
                   netId === n.id ? ACCENT_BG[n.accent] : "text-muted-foreground hover:bg-secondary"
                 }`}
               >
@@ -152,10 +152,17 @@ function Index() {
             ))}
           </div>
 
-          <h2 className="mt-6 text-xl font-bold">{active.name} non-expiry bundles</h2>
-          <p className="text-sm text-muted-foreground">
-            Prices shown in {country.currency} ({country.symbol})
-          </p>
+          <div className="mt-7 flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                {country.flag} {country.name} · {country.currency}
+              </p>
+              <h2 className="font-display text-xl font-bold">{active.name} bundles</h2>
+            </div>
+            <span className="rounded-full bg-secondary px-3 py-1 text-[11px] font-bold text-muted-foreground">
+              Non-expiry
+            </span>
+          </div>
 
           <BundleFilters
             query={query}
@@ -166,34 +173,67 @@ function Index() {
           />
 
           {visibleBundles.length === 0 ? (
-            <p className="mt-6 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+            <p className="mt-6 rounded-3xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
               No packages match “{query}”. Try another size or clear the filters.
             </p>
           ) : null}
 
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            {visibleBundles.map((b) => (
+          {featured ? (
+            <article className="relative mt-4 overflow-hidden rounded-3xl bg-navy p-6 text-primary-foreground shadow-pop">
+              <div className="pointer-events-none absolute -right-6 -top-6 size-28 rounded-full bg-gold/25 blur-3xl" />
+              <div className="relative flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-gold">
+                    {featured.tag ?? "Most popular"}
+                  </p>
+                  <p className="mt-1 font-display text-2xl font-bold">{featured.size} data</p>
+                  <p className="mt-1 text-xs text-primary-foreground/60">
+                    {active.short} · never expires
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="font-display text-2xl font-bold text-gold">
+                    {formatMoney(country, featured.price)}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-widest text-primary-foreground/50">
+                    One-off
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="gold"
+                className="relative mt-5 h-13 w-full text-base"
+                onClick={() => {
+                  setBundle(featured);
+                  setOpen(true);
+                }}
+              >
+                Buy Bundle Now
+              </Button>
+            </article>
+          ) : null}
+
+          <div className="mt-4 grid grid-cols-2 gap-4 pb-2">
+            {rest.map((b) => (
               <article
                 key={b.size}
-                className="flex flex-col rounded-2xl border border-border bg-card p-4 shadow-card"
+                className="flex flex-col rounded-3xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-0.5 hover:shadow-pop"
               >
-                <div className="flex items-center justify-between gap-1">
-                  <span className="text-2xl font-extrabold">{b.size}</span>
+                <div className="flex items-start justify-between gap-1">
+                  <span className="font-display text-xl font-bold">{b.size}</span>
                   {b.tag ? (
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${ACCENT_BG[active.accent]}`}
-                    >
+                    <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-navy">
                       {b.tag}
                     </span>
                   ) : null}
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Non-expiry · {active.short}
+                <p className="mt-1 text-xs text-muted-foreground">Non-expiry · {active.short}</p>
+                <p className="mt-3 font-display text-lg font-bold">
+                  {formatMoney(country, b.price)}
                 </p>
-                <p className="mt-3 text-lg font-bold">{formatMoney(country, b.price)}</p>
                 <Button
                   variant={ACCENT_BUTTON[active.accent]}
-                  className="mt-3 h-11 w-full"
+                  className="mt-3 h-11 w-full rounded-2xl"
                   onClick={() => {
                     setBundle(b);
                     setOpen(true);
@@ -204,8 +244,8 @@ function Index() {
               </article>
             ))}
           </div>
-
         </section>
+
 
         <section className="mt-8 px-4">
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
