@@ -69,6 +69,13 @@ function Index() {
     () => filterBundles(bundles, query, filter),
     [bundles, query, filter],
   );
+  const featured =
+    visibleBundles.find((b) => b.tag === "Best value") ??
+    visibleBundles.find((b) => b.tag) ??
+    visibleBundles[0] ??
+    null;
+  const rest = visibleBundles.filter((b) => b !== featured);
+
 
 
   const changeCountry = (c: Country) => {
