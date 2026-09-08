@@ -77,52 +77,63 @@ function Index() {
   };
 
   return (
-    <div className="min-h-screen pb-28">
-      <header className="bg-hero px-4 pt-5 pb-12 text-primary-foreground">
+    <div className="min-h-screen bg-surface pb-28">
+      <header className="bg-hero rounded-b-[2.25rem] px-5 pt-5 pb-14 text-primary-foreground">
         <div className="mx-auto max-w-md">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-lg font-extrabold tracking-tight">FastData Africa</span>
-            <a
-              href="#tracking"
-              className="rounded-full border border-primary-foreground/30 px-3 py-1 text-xs font-bold"
-            >
-              Track order
-            </a>
-            <Link
-              to="/dashboard"
-              className="rounded-full border border-primary-foreground/30 px-3 py-1 text-xs font-bold"
-            >
-              Dashboard
-            </Link>
-            <span className="animate-pulse rounded-full bg-whatsapp px-3 py-1 text-xs font-bold text-whatsapp-foreground">
-              Automated Delivery
+            <span className="font-display text-xl font-bold tracking-tight text-gold">
+              FastData Africa
+            </span>
+            <div className="flex items-center gap-2">
+              <a
+                href="#tracking"
+                className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
+              >
+                Track order
+              </a>
+              <Link
+                to="/dashboard"
+                className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
+              >
+                Dashboard
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1">
+            <span className="size-2 animate-pulse rounded-full bg-gold" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
+              Automated delivery · {COUNTRIES.length} markets live
             </span>
           </div>
 
-          <div className="mt-4">
+          <h1 className="mt-4 font-display text-4xl font-bold leading-tight">
+            Stay connected
+            <br />
+            <span className="text-gold">across Africa.</span>
+          </h1>
+          <p className="mt-3 max-w-[19rem] text-sm text-primary-foreground/70">
+            Instant non-expiry data bundles, airtime and utility bills — priced in{" "}
+            {country.currency} and delivered in seconds.
+          </p>
+
+          <div className="mt-6">
             <CountryRegionBar country={country} onChange={changeCountry} />
           </div>
 
-
-          <h1 className="mt-6 text-3xl font-extrabold leading-tight">
-            Instant Data Bundles <span className="text-mtn">•</span> Non-Expiry
-          </h1>
-          <p className="mt-3 text-sm text-primary-foreground/80">
-            Pan-African data delivery in {COUNTRIES.length} countries. Prices in{" "}
-            {country.currency}, paid with Paystack or local Mobile Money.
-          </p>
-          <p className="mt-4 inline-flex rounded-full bg-mtn px-3 py-1.5 text-xs font-bold text-mtn-foreground">
-            Now Supporting ECG Power, TV Subscriptions &amp; Local Utility Bills!
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
+          <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-semibold">
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">No expiry</span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
               Local currency
             </span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">24/7 support</span>
+            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
+              ECG, TV &amp; bills
+            </span>
           </div>
         </div>
       </header>
+
 
       <main className="mx-auto -mt-6 max-w-md">
         <section className="px-4">
