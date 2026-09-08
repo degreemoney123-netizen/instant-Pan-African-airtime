@@ -15,6 +15,9 @@ import { UtilitySection } from "@/components/UtilitySection";
 import { SalesTicker } from "@/components/SalesTicker";
 import { TrustBadges } from "@/components/TrustBadges";
 import { Testimonials } from "@/components/Testimonials";
+import { PromoBanner } from "@/components/PromoBanner";
+import { SocialProofWall } from "@/components/SocialProofWall";
+import { ReferralCard } from "@/components/ReferralCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SupportBar } from "@/components/SupportBar";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
@@ -143,6 +146,7 @@ function Index() {
 
 
       <main className="mx-auto -mt-8 max-w-md">
+        <PromoBanner />
         <section className="px-5">
           <div className="flex gap-2 overflow-x-auto rounded-3xl border border-border bg-card p-2 shadow-pop">
             {country.networks.map((n) => (
@@ -273,6 +277,8 @@ function Index() {
           </div>
         </section>
 
+        <SocialProofWall />
+
         <TrustBadges />
 
         <UtilitySection country={country} onReceipt={setReceipt} />
@@ -282,6 +288,8 @@ function Index() {
         <VendorSection country={country} onCountryChange={changeCountry} onReceipt={setReceipt} />
 
         <Testimonials />
+
+        <ReferralCard />
 
         <section className="mt-8 px-4 pb-8">
           <h2 className="text-xl font-bold">How it works &amp; FAQ</h2>
