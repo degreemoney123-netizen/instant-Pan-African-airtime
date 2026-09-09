@@ -446,6 +446,10 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
 
             {method === "paystack" && charge ? (
               <div className="space-y-2">
+                <p className="rounded-2xl border border-gold/30 bg-gold/10 p-3 text-xs font-semibold">
+                  Card payments are launching soon. Your order is saved — pay now with Mobile Money
+                  or finish on WhatsApp and we deliver right away.
+                </p>
                 <Button
                   className="h-12 w-full text-base"
                   disabled={paying}
