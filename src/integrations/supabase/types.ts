@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      loyalty_ledger: {
+        Row: {
+          created_at: string
+          id: string
+          order_reference: string | null
+          points: number
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_reference?: string | null
+          points: number
+          reason: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_reference?: string | null
+          points?: number
+          reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           amount: number
@@ -31,6 +58,7 @@ export type Database = {
           reference: string
           status: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           amount: number
@@ -48,6 +76,7 @@ export type Database = {
           reference: string
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           amount?: number
@@ -65,6 +94,67 @@ export type Database = {
           reference?: string
           status?: string
           updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          points: number
+          referral_code: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          points?: number
+          referral_code?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          points?: number
+          referral_code?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_recipients: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          network: string
+          number: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          network: string
+          number: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          network?: string
+          number?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -73,7 +163,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      award_order_points: {
+        Args: { _points: number; _reference: string; _user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
