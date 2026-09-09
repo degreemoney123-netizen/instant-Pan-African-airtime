@@ -1,7 +1,20 @@
 import { formatUsd, toUsd, type Country } from "@/lib/fastdata";
 
+/** Live publishable key — used once the Paystack business is approved. */
+const LIVE_PUBLIC_KEY = "pk_live_8eebda08d1278148b2cdc5b3aa0ac27a5c0a4dcb";
+
+/**
+ * Test publishable key. Set VITE_PAYSTACK_TEST_PUBLIC_KEY to run the whole
+ * checkout end-to-end with Paystack test cards. Remove it to go live —
+ * no other code change is needed.
+ */
+const TEST_PUBLIC_KEY = (import.meta.env["VITE_PAYSTACK_TEST_PUBLIC_KEY"] as string | undefined) ?? "";
+
+export const PAYSTACK_MODE: "test" | "live" = TEST_PUBLIC_KEY.startsWith("pk_test") ? "test" : "live";
+
 /** Publishable key — safe to ship to the browser. */
-export const PAYSTACK_PUBLIC_KEY = "pk_live_8eebda08d1278148b2cdc5b3aa0ac27a5c0a4dcb";
+export const PAYSTACK_PUBLIC_KEY = PAYSTACK_MODE === "test" ? TEST_PUBLIC_KEY : LIVE_PUBLIC_KEY;
+
 
 /** Currencies Paystack charges directly. */
 const SUPPORTED = new Set(["GHS", "NGN", "KES", "ZAR", "XOF"]);
