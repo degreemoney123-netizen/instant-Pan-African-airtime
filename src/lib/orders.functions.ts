@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const createSchema = z.object({
   orderId: z.string().min(3).max(40),
@@ -75,4 +76,33 @@ export const getOrdersByRecipient = createServerFn({ method: "POST" })
 
     if (error) throw new Error("Could not load orders");
     return rows ?? [];
+  });
+
+/** Same as createPendingOrder, but attaches the order to the signed-in customer. */
+export const createMyPendingOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => createSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const reference = `FD-${Date.now().toString(36).toUpperCase()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)
+      .toUpperCase()}`;
+
+    const { error } = await supabaseAdmin.from("orders").insert({
+      reference,
+      order_id: data.orderId,
+      recipient: data.recipient,
+      item: data.item,
+      amount: data.amount,
+      currency: data.currency,
+      country: data.country,
+      customer_email: data.email ?? null,
+      status: "Pending Payment",
+      user_id: context.userId,
+    });
+
+    if (error) throw new Error("Could not create order");
+    return { reference };
   });
