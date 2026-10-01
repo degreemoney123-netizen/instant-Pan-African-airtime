@@ -13,8 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { createPendingOrder } from "@/lib/orders.functions";
-import { openPaystackCheckout, paystackCharge } from "@/lib/paystack";
+import { createMyPendingOrder, createPendingOrder } from "@/lib/orders.functions";
+import { useAuth } from "@/lib/useAuth";
+import { PAYSTACK_MODE, openPaystackCheckout, paystackCharge } from "@/lib/paystack";
 import { FavoriteRecipients } from "@/components/FavoriteRecipients";
 import { OrderProgressTimeline } from "@/components/OrderProgressTimeline";
 import { downloadReceiptPdf } from "@/lib/receipt-pdf";
@@ -106,6 +107,8 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   const [favLabel, setFavLabel] = useState("");
   const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
   const createOrder = useServerFn(createPendingOrder);
+  const createMyOrder = useServerFn(createMyPendingOrder);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (open) {
@@ -147,7 +150,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
       await openPaystackCheckout({
         charge,
         reference,
-        email: `customer+${reference.toLowerCase()}@fastdataafrica.com`,
+        email: user?.email ?? `customer+${reference.toLowerCase()}@fastdataafrica.com`,
         metadata: {
           order_id: orderIdValue,
           recipient: local,
@@ -206,7 +209,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
       setSaving(true);
       const orderId = makeOrderId("FD", local);
       try {
-        const res = await createOrder({
+        const payload = {
           data: {
             orderId,
             recipient: local,
@@ -214,8 +217,10 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
             amount: bundle.price,
             currency: country.currency,
             country: `${country.flag} ${country.name}`,
+            ...(user?.email ? { email: user.email } : {}),
           },
-        });
+        };
+        const res = user ? await createMyOrder(payload) : await createOrder(payload);
         setReference(res.reference);
         setOrderIdValue(orderId);
         setStep(3);
@@ -446,10 +451,17 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
 
             {method === "paystack" && charge ? (
               <div className="space-y-2">
-                <p className="rounded-2xl border border-gold/30 bg-gold/10 p-3 text-xs font-semibold">
-                  Card payments are launching soon. Your order is saved — pay now with Mobile Money
-                  or finish on WhatsApp and we deliver right away.
-                </p>
+                {PAYSTACK_MODE === "test" ? (
+                  <p className="rounded-2xl border border-gold/30 bg-gold/10 p-3 text-xs font-semibold">
+                    Test mode: use a Paystack test card (4084 0840 8408 4081, any future expiry,
+                    CVV 408) to run a full order end-to-end. No real money moves.
+                  </p>
+                ) : (
+                  <p className="rounded-2xl border border-gold/30 bg-gold/10 p-3 text-xs font-semibold">
+                    Card payments are launching soon. Your order is saved — pay now with Mobile
+                    Money or finish on WhatsApp and we deliver right away.
+                  </p>
+                )}
                 <Button
                   className="h-12 w-full text-base"
                   disabled={paying}
