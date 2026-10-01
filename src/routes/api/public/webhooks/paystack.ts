@@ -53,7 +53,7 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
 
         const { data: order, error: findError } = await supabaseAdmin
           .from("orders")
-          .select("id, status")
+          .select("id, status, user_id, amount, reference")
           .eq("reference", reference)
           .maybeSingle();
 
@@ -79,6 +79,17 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
         if (updateError) {
           console.error("Paystack webhook update failed", updateError.message);
           return new Response("Update failed", { status: 500 });
+        }
+
+        // Loyalty: 1 point per unit of local currency, awarded once per order.
+        if (order.user_id) {
+          const points = Math.max(1, Math.floor(Number(order.amount)));
+          const { error: pointsError } = await supabaseAdmin.rpc("award_order_points", {
+            _user_id: order.user_id,
+            _reference: reference,
+            _points: points,
+          });
+          if (pointsError) console.error("Points award failed", pointsError.message);
         }
 
         return new Response("ok", { status: 200 });
