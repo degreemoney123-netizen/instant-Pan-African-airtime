@@ -20,7 +20,11 @@ import { SocialProofWall } from "@/components/SocialProofWall";
 import { ReferralCard } from "@/components/ReferralCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SupportBar } from "@/components/SupportBar";
+import { AgentLeaderboard } from "@/components/AgentLeaderboard";
+import { AssistantChat } from "@/components/AssistantChat";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
+import { useLang } from "@/lib/i18n";
 import {
   BundleFilters,
   filterBundles,
@@ -54,6 +58,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { t } = useLang();
   const [country, setCountry] = useState<Country>(COUNTRIES[0] as Country);
   const [netId, setNetId] = useState(country.networks[0]!.id);
   const [bundle, setBundle] = useState<Bundle | null>(null);
@@ -99,39 +104,38 @@ function Index() {
                 href="#tracking"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
-                Track order
+                {t("nav_track")}
               </a>
               <Link
                 to="/account"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
-                My account
+                {t("nav_account")}
               </Link>
               <Link
                 to="/dashboard"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
-                Dashboard
+                {t("nav_dashboard")}
               </Link>
-
+              <LanguageSwitcher />
             </div>
           </div>
 
           <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1">
             <span className="size-2 animate-pulse rounded-full bg-gold" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
-              Automated delivery · {COUNTRIES.length} markets live
+              Automated delivery placeholder
             </span>
           </div>
 
           <h1 className="mt-4 font-display text-4xl font-bold leading-tight">
-            Stay connected
+            {t("hero_title1")}
             <br />
-            <span className="text-gold">across Africa.</span>
+            <span className="text-gold">{t("hero_title2")}</span>
           </h1>
           <p className="mt-3 max-w-[19rem] text-sm text-primary-foreground/70">
-            Instant non-expiry data bundles, airtime and utility bills — priced in{" "}
-            {country.currency} and delivered in seconds.
+            {t("hero_sub", { cur: country.currency })}
           </p>
 
           <div className="mt-6">
@@ -139,13 +143,17 @@ function Index() {
           </div>
 
           <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-semibold">
-            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">No expiry</span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
-              Local currency
+              {t("pill_no_expiry")}
             </span>
-            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">24/7 support</span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
-              ECG, TV &amp; bills
+              {t("pill_local_currency")}
+            </span>
+            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
+              {t("pill_support")}
+            </span>
+            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
+              {t("pill_bills")}
             </span>
           </div>
         </div>
