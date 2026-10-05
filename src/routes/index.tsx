@@ -125,7 +125,7 @@ function Index() {
           <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1">
             <span className="size-2 animate-pulse rounded-full bg-gold" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
-              Automated delivery placeholder
+              {t("hero_badge", { n: COUNTRIES.length })}
             </span>
           </div>
 
