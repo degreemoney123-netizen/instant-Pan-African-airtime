@@ -20,7 +20,11 @@ import { SocialProofWall } from "@/components/SocialProofWall";
 import { ReferralCard } from "@/components/ReferralCard";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SupportBar } from "@/components/SupportBar";
+import { AgentLeaderboard } from "@/components/AgentLeaderboard";
+import { AssistantChat } from "@/components/AssistantChat";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ReceiptModal, type Receipt } from "@/components/ReceiptModal";
+import { useLang } from "@/lib/i18n";
 import {
   BundleFilters,
   filterBundles,
@@ -54,6 +58,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { t } = useLang();
   const [country, setCountry] = useState<Country>(COUNTRIES[0] as Country);
   const [netId, setNetId] = useState(country.networks[0]!.id);
   const [bundle, setBundle] = useState<Bundle | null>(null);
@@ -99,39 +104,38 @@ function Index() {
                 href="#tracking"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
-                Track order
+                {t("nav_track")}
               </a>
               <Link
                 to="/account"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
-                My account
+                {t("nav_account")}
               </Link>
               <Link
                 to="/dashboard"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
-                Dashboard
+                {t("nav_dashboard")}
               </Link>
-
+              <LanguageSwitcher />
             </div>
           </div>
 
           <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1">
             <span className="size-2 animate-pulse rounded-full bg-gold" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
-              Automated delivery · {COUNTRIES.length} markets live
+              {t("hero_badge", { n: COUNTRIES.length })}
             </span>
           </div>
 
           <h1 className="mt-4 font-display text-4xl font-bold leading-tight">
-            Stay connected
+            {t("hero_title1")}
             <br />
-            <span className="text-gold">across Africa.</span>
+            <span className="text-gold">{t("hero_title2")}</span>
           </h1>
           <p className="mt-3 max-w-[19rem] text-sm text-primary-foreground/70">
-            Instant non-expiry data bundles, airtime and utility bills — priced in{" "}
-            {country.currency} and delivered in seconds.
+            {t("hero_sub", { cur: country.currency })}
           </p>
 
           <div className="mt-6">
@@ -139,13 +143,17 @@ function Index() {
           </div>
 
           <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-semibold">
-            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">No expiry</span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
-              Local currency
+              {t("pill_no_expiry")}
             </span>
-            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">24/7 support</span>
             <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
-              ECG, TV &amp; bills
+              {t("pill_local_currency")}
+            </span>
+            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
+              {t("pill_support")}
+            </span>
+            <span className="rounded-full bg-primary-foreground/10 px-3 py-1.5">
+              {t("pill_bills")}
             </span>
           </div>
         </div>
@@ -175,10 +183,12 @@ function Index() {
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 {country.flag} {country.name} · {country.currency}
               </p>
-              <h2 className="font-display text-xl font-bold">{active.name} bundles</h2>
+              <h2 className="font-display text-xl font-bold">
+                {t("bundles_title", { net: active.name })}
+              </h2>
             </div>
             <span className="rounded-full bg-secondary px-3 py-1 text-[11px] font-bold text-muted-foreground">
-              Non-expiry
+              {t("non_expiry")}
             </span>
           </div>
 
@@ -192,7 +202,7 @@ function Index() {
 
           {visibleBundles.length === 0 ? (
             <p className="mt-6 rounded-3xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-              No packages match “{query}”. Try another size or clear the filters.
+              {t("no_match", { q: query })}
             </p>
           ) : null}
 
@@ -202,7 +212,7 @@ function Index() {
               <div className="relative flex items-start justify-between gap-3">
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-widest text-gold">
-                    {featured.tag ?? "Most popular"}
+                    {featured.tag ?? t("featured_tag")}
                   </p>
                   <p className="mt-1 font-display text-2xl font-bold">{featured.size} data</p>
                   <p className="mt-1 text-xs text-primary-foreground/60">
@@ -214,7 +224,7 @@ function Index() {
                     {formatMoney(country, featured.price)}
                   </p>
                   <p className="text-[10px] uppercase tracking-widest text-primary-foreground/50">
-                    One-off
+                    {t("one_off")}
                   </p>
                 </div>
               </div>
@@ -226,7 +236,7 @@ function Index() {
                   setOpen(true);
                 }}
               >
-                Buy Bundle Now
+                {t("buy_now")}
               </Button>
             </article>
           ) : null}
@@ -257,7 +267,7 @@ function Index() {
                     setOpen(true);
                   }}
                 >
-                  Buy Package
+                  {t("buy_package")}
                 </Button>
               </article>
             ))}
@@ -268,10 +278,10 @@ function Index() {
         <section className="mt-8 px-4">
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
             <h2 className="text-lg font-bold">
-              Payment options in {country.flag} {country.name}
+              {t("pay_title", { flag: country.flag, name: country.name })}
             </h2>
             <p className="text-sm text-muted-foreground">
-              Checkout auto-adjusts to {country.currency} for Paystack and Mobile Money.
+              {t("pay_sub", { cur: country.currency })}
             </p>
             <ul className="mt-4 space-y-2">
               {country.momo.map((m) => (
@@ -294,45 +304,35 @@ function Index() {
 
         <VendorSection country={country} onCountryChange={changeCountry} onReceipt={setReceipt} />
 
+        <AgentLeaderboard />
+
         <Testimonials />
 
         <ReferralCard />
 
         <section className="mt-8 px-4 pb-8">
-          <h2 className="text-xl font-bold">How it works &amp; FAQ</h2>
+          <h2 className="text-xl font-bold">{t("how_title")}</h2>
           <ol className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>1. Pick your country, network and bundle size.</li>
-            <li>2. Enter the recipient number and confirm the network.</li>
-            <li>3. Pay in your local currency, then confirm on WhatsApp.</li>
+            <li>{t("step1")}</li>
+            <li>{t("step2")}</li>
+            <li>{t("step3")}</li>
           </ol>
           <Accordion type="single" collapsible className="mt-4">
             <AccordionItem value="a">
-              <AccordionTrigger>Which countries are supported?</AccordionTrigger>
-              <AccordionContent>
-                {COUNTRIES.map((c) => `${c.flag} ${c.name}`).join(", ")} — with more African
-                markets added every month.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_countries_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_countries_a")}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="b">
-              <AccordionTrigger>How fast is delivery?</AccordionTrigger>
-              <AccordionContent>
-                Most orders are processed automatically within 1–15 minutes, in every country we
-                serve.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_speed_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_speed_a")}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="c">
-              <AccordionTrigger>What currency am I charged in?</AccordionTrigger>
-              <AccordionContent>
-                Always the currency of the country you select — {country.currency} right now. No
-                hidden conversion at checkout.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_currency_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_currency_a", { cur: country.currency })}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="d">
-              <AccordionTrigger>Can I become an agent outside Ghana?</AccordionTrigger>
-              <AccordionContent>
-                Yes. The vendor portal supports agents in every listed country, with local
-                registration fees and local earnings potential.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_agent_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_agent_a")}</AccordionContent>
             </AccordionItem>
           </Accordion>
         </section>
@@ -343,6 +343,9 @@ function Index() {
       <SupportBar
         context={`Hello FastData Africa! I need help with a data bundle order in ${country.name}.`}
       />
+
+      <AssistantChat />
+
 
 
       <OrderDialog

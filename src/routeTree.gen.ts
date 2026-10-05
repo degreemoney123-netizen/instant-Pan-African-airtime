@@ -17,6 +17,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundsRouteImport } from './routes/refunds'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
 import { Route as ApiPublicWebhooksPaystackRouteImport } from './routes/api/public/webhooks/paystack'
 
@@ -60,6 +61,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAssistantRoute = ApiAssistantRouteImport.update({
+  id: '/api/assistant',
+  path: '/api/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
   id: '/order/success',
   path: '/order/success',
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
   '/terms': typeof TermsRoute
+  '/api/assistant': typeof ApiAssistantRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
 }
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
   '/terms': typeof TermsRoute
+  '/api/assistant': typeof ApiAssistantRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
 }
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
   '/terms': typeof TermsRoute
+  '/api/assistant': typeof ApiAssistantRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
 }
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/refunds'
     | '/terms'
+    | '/api/assistant'
     | '/order/success'
     | '/api/public/webhooks/paystack'
   fileRoutesByTo: FileRoutesByTo
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/refunds'
     | '/terms'
+    | '/api/assistant'
     | '/order/success'
     | '/api/public/webhooks/paystack'
   id:
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/refunds'
     | '/terms'
+    | '/api/assistant'
     | '/order/success'
     | '/api/public/webhooks/paystack'
   fileRoutesById: FileRoutesById
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RefundsRoute: typeof RefundsRoute
   TermsRoute: typeof TermsRoute
+  ApiAssistantRoute: typeof ApiAssistantRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ApiPublicWebhooksPaystackRoute: typeof ApiPublicWebhooksPaystackRoute
 }
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/assistant': {
+      id: '/api/assistant'
+      path: '/api/assistant'
+      fullPath: '/api/assistant'
+      preLoaderRoute: typeof ApiAssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/order/success': {
       id: '/order/success'
       path: '/order/success'
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RefundsRoute: RefundsRoute,
   TermsRoute: TermsRoute,
+  ApiAssistantRoute: ApiAssistantRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ApiPublicWebhooksPaystackRoute: ApiPublicWebhooksPaystackRoute,
 }
