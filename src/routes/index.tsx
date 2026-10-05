@@ -311,40 +311,28 @@ function Index() {
         <ReferralCard />
 
         <section className="mt-8 px-4 pb-8">
-          <h2 className="text-xl font-bold">How it works &amp; FAQ</h2>
+          <h2 className="text-xl font-bold">{t("how_title")}</h2>
           <ol className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>1. Pick your country, network and bundle size.</li>
-            <li>2. Enter the recipient number and confirm the network.</li>
-            <li>3. Pay in your local currency, then confirm on WhatsApp.</li>
+            <li>{t("step1")}</li>
+            <li>{t("step2")}</li>
+            <li>{t("step3")}</li>
           </ol>
           <Accordion type="single" collapsible className="mt-4">
             <AccordionItem value="a">
-              <AccordionTrigger>Which countries are supported?</AccordionTrigger>
-              <AccordionContent>
-                {COUNTRIES.map((c) => `${c.flag} ${c.name}`).join(", ")} — with more African
-                markets added every month.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_countries_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_countries_a")}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="b">
-              <AccordionTrigger>How fast is delivery?</AccordionTrigger>
-              <AccordionContent>
-                Most orders are processed automatically within 1–15 minutes, in every country we
-                serve.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_speed_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_speed_a")}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="c">
-              <AccordionTrigger>What currency am I charged in?</AccordionTrigger>
-              <AccordionContent>
-                Always the currency of the country you select — {country.currency} right now. No
-                hidden conversion at checkout.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_currency_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_currency_a", { cur: country.currency })}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="d">
-              <AccordionTrigger>Can I become an agent outside Ghana?</AccordionTrigger>
-              <AccordionContent>
-                Yes. The vendor portal supports agents in every listed country, with local
-                registration fees and local earnings potential.
-              </AccordionContent>
+              <AccordionTrigger>{t("faq_agent_q")}</AccordionTrigger>
+              <AccordionContent>{t("faq_agent_a")}</AccordionContent>
             </AccordionItem>
           </Accordion>
         </section>
@@ -355,6 +343,9 @@ function Index() {
       <SupportBar
         context={`Hello FastData Africa! I need help with a data bundle order in ${country.name}.`}
       />
+
+      <AssistantChat />
+
 
 
       <OrderDialog
