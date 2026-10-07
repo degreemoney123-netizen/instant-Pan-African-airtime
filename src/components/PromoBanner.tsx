@@ -11,12 +11,14 @@ function nextMidnight() {
 }
 
 function useCountdown() {
-  const [left, setLeft] = useState(() => nextMidnight() - Date.now());
+  // Null until mounted so SSR and the client's first render match exactly.
+  const [left, setLeft] = useState<number | null>(null);
   useEffect(() => {
+    setLeft(nextMidnight() - Date.now());
     const t = setInterval(() => setLeft(nextMidnight() - Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
-  const total = Math.max(0, Math.floor(left / 1000));
+  const total = Math.max(0, Math.floor((left ?? 0) / 1000));
   const h = String(Math.floor(total / 3600)).padStart(2, "0");
   const m = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
   const s = String(total % 60).padStart(2, "0");
