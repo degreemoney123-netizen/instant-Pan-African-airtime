@@ -97,7 +97,9 @@ export function handleAssistant(request: Request) {
 
     const result = streamText({
       model: provider.responses("openai/gpt-6-astra"),
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...history],
+    ...,
+    instructions: SYSTEM_PROMPT,
+    messages: history,
       abortSignal: request.signal,
       providerOptions: {
         openai: {
