@@ -81,6 +81,17 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
           return new Response("Update failed", { status: 500 });
         }
 
+        // Auto-fulfill via DataHub GH (simulated when no API key is configured).
+        try {
+          const { fulfillOrder } = await import("@/lib/fulfill.server");
+          const result = await fulfillOrder(reference);
+          if (result.status !== "Delivered") {
+            console.error("Auto-fulfillment incomplete", result.detail ?? result.status);
+          }
+        } catch (fulfillError) {
+          console.error("Auto-fulfillment failed", fulfillError);
+        }
+
         // Loyalty: 1 point per unit of local currency, awarded once per order.
         if (order.user_id) {
           const points = Math.max(1, Math.floor(Number(order.amount)));
