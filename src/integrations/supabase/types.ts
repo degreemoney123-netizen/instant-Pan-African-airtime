@@ -158,6 +158,63 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_wallets: {
+        Row: {
+          balance: number
+          created_at: string
+          currency: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          currency?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          currency?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          kind: string
+          note: string | null
+          reference: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          kind: string
+          note?: string | null
+          reference: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          reference?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -166,6 +223,21 @@ export type Database = {
       award_order_points: {
         Args: { _points: number; _reference: string; _user_id: string }
         Returns: undefined
+      }
+      complete_wallet_topup: {
+        Args: { _amount: number; _reference: string }
+        Returns: boolean
+      }
+      wallet_purchase: {
+        Args: {
+          _amount: number
+          _item: string
+          _order_id: string
+          _recipient: string
+          _reference: string
+          _user_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

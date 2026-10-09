@@ -51,6 +51,20 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+        // Vendor wallet top-ups: credit once, amount verified against the pending top-up.
+        if (reference.startsWith("WT-")) {
+          const paid = Number(payload.data?.amount ?? 0) / 100;
+          const { error: topupError } = await supabaseAdmin.rpc("complete_wallet_topup", {
+            _reference: reference,
+            _amount: paid,
+          });
+          if (topupError) {
+            console.error("Wallet top-up credit failed", topupError.message);
+            return new Response("Top-up failed", { status: 500 });
+          }
+          return new Response("ok", { status: 200 });
+        }
+
         const { data: order, error: findError } = await supabaseAdmin
           .from("orders")
           .select("id, status, user_id, amount, reference")
