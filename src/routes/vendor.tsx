@@ -88,7 +88,10 @@ function VendorDashboard() {
   const buyMut = useMutation({
     mutationFn: () => buy({ data: { networkIndex: netIndex, size: selected.size, recipient: recipient.trim() } }),
     onSuccess: (r) => {
-      if (!r.ok) return toast.error(r.message);
+      if (!r.ok) {
+        toast.error(r.message);
+        return;
+      }
       toast.success(`${r.item} → ${recipient}: ${r.status}`);
       setRecipient("");
       refresh();
