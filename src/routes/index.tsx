@@ -113,6 +113,12 @@ function Index() {
                 {t("nav_account")}
               </Link>
               <Link
+                to="/vendor"
+                className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
+              >
+                Vendor
+              </Link>
+              <Link
                 to="/dashboard"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
