@@ -10,6 +10,7 @@ import { openPaystackCheckout, paystackCharge, PAYSTACK_MODE } from "@/lib/payst
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { VendorReferralCard } from "@/components/VendorReferralCard";
 
 export const Route = createFileRoute("/vendor")({
   component: VendorDashboard,
@@ -177,6 +178,8 @@ function VendorDashboard() {
         </div>
       </section>
 
+      <VendorReferralCard />
+
       <section className="mt-6 rounded-2xl border bg-card p-5">
         <h2 className="text-lg font-bold">My orders</h2>
         {!d?.orders.length ? (
@@ -208,11 +211,11 @@ function VendorDashboard() {
             {d.transactions.map((t) => (
               <li key={t.reference} className="flex items-center justify-between py-3 text-sm">
                 <div>
-                  <p className="font-semibold">{t.kind === "topup" ? "Top-up" : "Purchase"}</p>
+                  <p className="font-semibold">{t.kind === "topup" ? "Top-up" : t.kind === "referral" ? "Referral commission" : "Purchase"}</p>
                   <p className="text-xs text-muted-foreground">{t.note} · {new Date(t.created_at).toLocaleString()}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold">{t.kind === "topup" ? "+" : "−"}{formatMoney(GH, Number(t.amount))}</p>
+                  <p className="font-semibold">{t.kind === "purchase" ? "−" : "+"}{formatMoney(GH, Number(t.amount))}</p>
                   <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${statusClass(t.status)}`}>{t.status}</span>
                 </div>
               </li>

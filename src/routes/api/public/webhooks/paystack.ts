@@ -115,6 +115,12 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
             _points: points,
           });
           if (pointsError) console.error("Points award failed", pointsError.message);
+          const { error: refError } = await supabaseAdmin.rpc("credit_referral_commission", {
+            _seller: order.user_id,
+            _reference: reference,
+            _amount: Number(order.amount),
+          });
+          if (refError) console.error("Referral commission failed", refError.message);
         }
 
         return new Response("ok", { status: 200 });
