@@ -8,6 +8,13 @@
       "when": 1791520339422,
       "tag": "0000_vendor_wallet",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791601717231,
+      "tag": "0001_vendor_referrals",
+      "breakpoints": true
     }
   ]
 }
