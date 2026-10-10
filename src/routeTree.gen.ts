@@ -17,6 +17,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RefundsRouteImport } from './routes/refunds'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as VendorRouteImport } from './routes/vendor'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
 import { Route as ApiPublicFulfillOrderRouteImport } from './routes/api/public/fulfill-order'
@@ -62,6 +63,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VendorRoute = VendorRouteImport.update({
+  id: '/vendor',
+  path: '/vendor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAssistantRoute = ApiAssistantRouteImport.update({
   id: '/api/assistant',
   path: '/api/assistant',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
   '/terms': typeof TermsRoute
+  '/vendor': typeof VendorRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/fulfill-order': typeof ApiPublicFulfillOrderRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
   '/terms': typeof TermsRoute
+  '/vendor': typeof VendorRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/fulfill-order': typeof ApiPublicFulfillOrderRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/refunds': typeof RefundsRoute
   '/terms': typeof TermsRoute
+  '/vendor': typeof VendorRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/fulfill-order': typeof ApiPublicFulfillOrderRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/refunds'
     | '/terms'
+    | '/vendor'
     | '/api/assistant'
     | '/order/success'
     | '/api/public/fulfill-order'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/refunds'
     | '/terms'
+    | '/vendor'
     | '/api/assistant'
     | '/order/success'
     | '/api/public/fulfill-order'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/refunds'
     | '/terms'
+    | '/vendor'
     | '/api/assistant'
     | '/order/success'
     | '/api/public/fulfill-order'
@@ -181,6 +193,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   RefundsRoute: typeof RefundsRoute
   TermsRoute: typeof TermsRoute
+  VendorRoute: typeof VendorRoute
   ApiAssistantRoute: typeof ApiAssistantRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ApiPublicFulfillOrderRoute: typeof ApiPublicFulfillOrderRoute
@@ -245,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/vendor': {
+      id: '/vendor'
+      path: '/vendor'
+      fullPath: '/vendor'
+      preLoaderRoute: typeof VendorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/assistant': {
       id: '/api/assistant'
       path: '/api/assistant'
@@ -285,6 +305,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   RefundsRoute: RefundsRoute,
   TermsRoute: TermsRoute,
+  VendorRoute: VendorRoute,
   ApiAssistantRoute: ApiAssistantRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ApiPublicFulfillOrderRoute: ApiPublicFulfillOrderRoute,
