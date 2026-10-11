@@ -96,12 +96,17 @@ function AccountPage() {
   });
 
   const profileSave = useMutation({
-    mutationFn: () => saveProfile({ data: { fullName, phone } }),
-    onSuccess: () => {
+    mutationFn: () =>
+      saveProfile({ data: { fullName: fullName.trim(), phone: phone.trim() } }),
+    onSuccess: (result) => {
+      // Sync local state with what was actually stored so the form never "reverts".
+      setFullName(result.fullName);
+      setPhone(result.phone);
       toast.success("Details saved");
       refresh();
     },
-    onError: () => toast.error("Could not save your details"),
+    onError: (err) =>
+      toast.error(err instanceof Error ? err.message : "Could not save your details"),
   });
 
   if (loading || !session) {
@@ -170,12 +175,21 @@ function AccountPage() {
           </div>
           <div className="space-y-1">
             <Label htmlFor="ph">Phone</Label>
-            <Input id="ph" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <Input
+              id="ph"
+              inputMode="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s-]/g, ""))}
+            />
           </div>
         </div>
         <Button
           className="mt-3"
-          disabled={profileSave.isPending}
+          disabled={
+            profileSave.isPending ||
+            (fullName.trim() === (data?.profile.full_name ?? "") &&
+              phone.trim() === (data?.profile.phone ?? ""))
+          }
           onClick={() => profileSave.mutate()}
         >
           {profileSave.isPending ? "Saving…" : "Save details"}
