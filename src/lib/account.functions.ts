@@ -88,16 +88,23 @@ export const updateMyProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
-      .object({ fullName: z.string().max(80).optional(), phone: z.string().max(20).optional() })
+      .object({ fullName: z.string().max(80).optional(), phone: z.string().max(25).optional() })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase
+    // Trim and sanitize before storing: name keeps letters/spaces, phone keeps digits and a leading +.
+    const fullName = (data.fullName ?? "").trim().replace(/\s+/g, " ");
+    const phone = (data.phone ?? "").trim().replace(/[^\d+]/g, "").replace(/(?!^)\+/g, "");
+
+    const { data: updated, error } = await context.supabase
       .from("profiles")
-      .update({ full_name: data.fullName ?? null, phone: data.phone ?? null })
-      .eq("id", context.userId);
+      .update({ full_name: fullName || null, phone: phone || null })
+      .eq("id", context.userId)
+      .select("full_name, phone")
+      .maybeSingle();
     if (error) throw new Error("Could not save your details");
-    return { ok: true };
+    if (!updated) throw new Error("Your account profile was not found — please sign in again");
+    return { ok: true, fullName: updated.full_name ?? "", phone: updated.phone ?? "" };
   });
 
 /** Saves a recipient number to the signed-in customer's account. */
