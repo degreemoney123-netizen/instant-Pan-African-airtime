@@ -55,7 +55,7 @@ export function downloadReceiptPdf(data: ReceiptPdfData): void {
   ];
   if (data.reference) rows.push({ text: `Reference:  ${data.reference}`, size: 12 });
   rows.push({ text: "", size: 6 });
-  rows.push({ text: "Support: +233 503660497 | support@fastdataafrica.com", size: 10 });
+  rows.push({ text: "Support: +233 202165004 | support@fastdataafrica.com", size: 10 });
   rows.push({ text: "Thank you for choosing FastData Africa.", size: 10 });
 
   const url = URL.createObjectURL(buildPdf(rows));

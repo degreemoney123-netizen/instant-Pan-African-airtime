@@ -1,4 +1,4 @@
-export const ADMIN_WHATSAPP = "233503660497";
+export const ADMIN_WHATSAPP = "233202165004";
 
 export type Network = { id: string; name: string; short: string; accent: AccentId };
 
@@ -68,8 +68,8 @@ export const COUNTRIES: Country[] = [
       n("at", "AirtelTigo (AT)", "AirtelTigo", "at"),
     ],
     momo: [
-      { label: "MTN MoMo Merchant", value: "FastData · +233 503660497" },
-      { label: "Telecel Cash", value: "FastData · +233 503660497" },
+      { label: "MTN MoMo Merchant", value: "FastData · +233 202165004" },
+      { label: "Telecel Cash", value: "FastData · +233 202165004" },
     ],
     vendor: {
       starter: 50,
@@ -434,7 +434,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 2000,
@@ -462,7 +462,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 12000,
@@ -490,7 +490,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -518,7 +518,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 240,
@@ -546,7 +546,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -574,7 +574,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 28000,
@@ -601,7 +601,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 1440,
@@ -629,7 +629,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 9600,
@@ -656,7 +656,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 9600,
@@ -683,7 +683,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -712,7 +712,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 32000,
@@ -739,7 +739,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 9600,
@@ -765,7 +765,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 2800,
@@ -792,7 +792,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 9600,
@@ -818,7 +818,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 240,
@@ -845,7 +845,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 320,
@@ -872,7 +872,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 1760,
@@ -899,7 +899,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 9600,
@@ -927,7 +927,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 1040,
@@ -955,7 +955,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 120000,
@@ -982,7 +982,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -1009,7 +1009,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 320,
@@ -1036,7 +1036,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 2800,
@@ -1063,7 +1063,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 80,
@@ -1091,7 +1091,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 72000,
@@ -1118,7 +1118,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 28000,
@@ -1145,7 +1145,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -1173,7 +1173,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 640,
@@ -1201,7 +1201,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 720,
@@ -1229,7 +1229,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 1040,
@@ -1256,7 +1256,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 320,
@@ -1284,7 +1284,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -1311,7 +1311,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 400,
@@ -1338,7 +1338,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 240,
@@ -1365,7 +1365,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 400,
@@ -1393,7 +1393,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 8800,
@@ -1421,7 +1421,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 20800,
@@ -1449,7 +1449,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 9600,
@@ -1476,7 +1476,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 7200,
@@ -1504,7 +1504,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 48,
@@ -1532,7 +1532,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Mobile Money / Paystack", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 520,
@@ -1561,7 +1561,7 @@ export const COUNTRIES: Country[] = [
     ],
     momo: [
       { label: "Paystack (card / transfer)", value: "FastData Africa" },
-      { label: "WhatsApp support", value: "+233 503660497" },
+      { label: "WhatsApp support", value: "+233 202165004" },
     ],
     vendor: {
       starter: 5,
@@ -1651,7 +1651,7 @@ export const trackOrder = (phone: string): { status: OrderStatus; note: string; 
 };
 
 export const SUPPORT_EMAIL = "support@fastdataafrica.com";
-export const SUPPORT_PHONE = "+233 503660497";
+export const SUPPORT_PHONE = "+233 202165004";
 export const SUPPORT_PHONE_ALT = "+233 30 274 1188";
 
 export const SOCIAL_LINKS = [
