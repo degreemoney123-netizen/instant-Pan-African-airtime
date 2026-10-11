@@ -29,7 +29,7 @@ export function LegalPage({
             </section>
           ))}
           <p className="text-xs text-muted-foreground">
-            Questions? Email support@fastdataafrica.com or WhatsApp +233 503660497.
+            Questions? Email support@fastdataafrica.com or WhatsApp +233 202165004.
           </p>
         </div>
       </main>

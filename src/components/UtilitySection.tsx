@@ -201,7 +201,7 @@ export function UtilitySection({
                 className="h-14 w-full text-base"
                 onClick={orderOnWhatsApp}
               >
-                Order via WhatsApp (+233 503660497)
+                Order via WhatsApp (+233 202165004)
               </Button>
             </div>
           </div>

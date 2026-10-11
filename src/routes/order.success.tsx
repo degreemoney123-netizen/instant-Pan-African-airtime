@@ -114,7 +114,7 @@ function OrderSuccess() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Send Receipt to WhatsApp (+233 503660497)
+            Send Receipt to WhatsApp (+233 202165004)
           </a>
         </Button>
         <Button asChild variant="outline" className="mt-3 h-12 w-full">
