@@ -175,12 +175,21 @@ function AccountPage() {
           </div>
           <div className="space-y-1">
             <Label htmlFor="ph">Phone</Label>
-            <Input id="ph" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <Input
+              id="ph"
+              inputMode="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s-]/g, ""))}
+            />
           </div>
         </div>
         <Button
           className="mt-3"
-          disabled={profileSave.isPending}
+          disabled={
+            profileSave.isPending ||
+            (fullName.trim() === (data?.profile.full_name ?? "") &&
+              phone.trim() === (data?.profile.phone ?? ""))
+          }
           onClick={() => profileSave.mutate()}
         >
           {profileSave.isPending ? "Saving…" : "Save details"}
