@@ -161,6 +161,31 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
         onSuccess: () => {
           toast.success("Payment confirmed — your bundle is being processed");
           setStage(1);
+          void (async () => {
+            // Webhook may lag the popup; retry while payment is still being confirmed.
+            for (let i = 0; i < 6; i++) {
+              try {
+                const r = await fetch("/api/public/fulfill-order", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ reference }),
+                });
+                const j = (await r.json()) as { status?: string };
+                if (j.status === "Delivered") {
+                  setStage(3);
+                  toast.success("Bundle delivered!");
+                  return;
+                }
+                if (j.status === "Pending/Failed") {
+                  toast.error("Delivery delayed — our team has been alerted and will retry shortly.");
+                  return;
+                }
+              } catch {
+                /* retry */
+              }
+              await new Promise((res) => setTimeout(res, 4000));
+            }
+          })();
         },
 
         onClose: () => toast.info("Checkout closed — your order is saved for later payment"),
