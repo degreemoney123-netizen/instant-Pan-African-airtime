@@ -95,6 +95,29 @@ export const Route = createFileRoute("/api/public/webhooks/paystack")({
           return new Response("Update failed", { status: 500 });
         }
 
+        if (reference.startsWith("WC-")) {
+          // WAEC checkers: assign PINs from stock instead of DataHub.
+          const { parseCheckerItem } = await import("@/lib/checkers");
+          const { data: full } = await supabaseAdmin
+            .from("orders")
+            .select("item, recipient, customer_email")
+            .eq("reference", reference)
+            .maybeSingle();
+          const parsed = full ? parseCheckerItem(full.item) : null;
+          if (full && parsed) {
+            const { data: got, error: assignError } = await supabaseAdmin.rpc("assign_checkers", {
+              _reference: reference,
+              _kind: parsed.kind,
+              _qty: parsed.qty,
+              _recipient: full.recipient,
+              _email: full.customer_email ?? "",
+            });
+            if (assignError) console.error("Checker assignment failed", assignError.message);
+            else if ((got ?? 0) >= parsed.qty) {
+              await supabaseAdmin.from("orders").update({ status: "Delivered" }).eq("reference", reference);
+            } else console.error("Checker stock short", reference);
+          }
+        } else
         // Auto-fulfill via DataHub GH (simulated when no API key is configured).
         try {
           const { fulfillOrder } = await import("@/lib/fulfill.server");

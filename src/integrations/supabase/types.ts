@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -29,6 +29,45 @@ export type Database = {
           key?: string
           updated_at?: string
           value?: number
+        }
+        Relationships: []
+      }
+      checker_vouchers: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          kind: string
+          order_reference: string | null
+          pin: string
+          recipient: string | null
+          serial: string
+          sold_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind: string
+          order_reference?: string | null
+          pin: string
+          recipient?: string | null
+          serial: string
+          sold_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind?: string
+          order_reference?: string | null
+          pin?: string
+          recipient?: string | null
+          serial?: string
+          sold_at?: string | null
+          status?: string
         }
         Relationships: []
       }
@@ -274,6 +313,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_checkers: {
+        Args: {
+          _email: string
+          _kind: string
+          _qty: number
+          _recipient: string
+          _reference: string
+        }
+        Returns: number
+      }
       award_order_points: {
         Args: { _points: number; _reference: string; _user_id: string }
         Returns: undefined

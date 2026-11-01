@@ -12,6 +12,7 @@ import { VendorSection } from "@/components/VendorSection";
 import { CountryRegionBar } from "@/components/CountryRegionBar";
 import { OrderTracker } from "@/components/OrderTracker";
 import { UtilitySection } from "@/components/UtilitySection";
+import { WaecSection } from "@/components/WaecSection";
 import { SalesTicker } from "@/components/SalesTicker";
 import { TrustBadges } from "@/components/TrustBadges";
 import { Testimonials } from "@/components/Testimonials";
@@ -105,6 +106,12 @@ function Index() {
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
               >
                 {t("nav_track")}
+              </a>
+              <a
+                href="#waec"
+                className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
+              >
+                WAEC
               </a>
               <Link
                 to="/account"
@@ -305,6 +312,8 @@ function Index() {
         <TrustBadges />
 
         <UtilitySection country={country} onReceipt={setReceipt} />
+
+        <WaecSection />
 
         <OrderTracker />
 
