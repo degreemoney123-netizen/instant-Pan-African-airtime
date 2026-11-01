@@ -130,11 +130,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   useEffect(() => {
     if (stage !== 1) return;
     const a = setTimeout(() => setStage(2), 2500);
-    const b = setTimeout(() => setStage(3), 7000);
-    return () => {
-      clearTimeout(a);
-      clearTimeout(b);
-    };
+    return () => clearTimeout(a);
   }, [stage]);
 
 
