@@ -15,6 +15,13 @@
       "when": 1791601717231,
       "tag": "0001_vendor_referrals",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793533255545,
+      "tag": "0002_checker_vouchers",
+      "breakpoints": true
     }
   ]
 }

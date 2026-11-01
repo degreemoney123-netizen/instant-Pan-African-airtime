@@ -32,6 +32,45 @@ export type Database = {
         }
         Relationships: []
       }
+      checker_vouchers: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          kind: string
+          order_reference: string | null
+          pin: string
+          recipient: string | null
+          serial: string
+          sold_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind: string
+          order_reference?: string | null
+          pin: string
+          recipient?: string | null
+          serial: string
+          sold_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          kind?: string
+          order_reference?: string | null
+          pin?: string
+          recipient?: string | null
+          serial?: string
+          sold_at?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       loyalty_ledger: {
         Row: {
           created_at: string
@@ -274,6 +313,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_checkers: {
+        Args: {
+          _email: string
+          _kind: string
+          _qty: number
+          _recipient: string
+          _reference: string
+        }
+        Returns: number
+      }
       award_order_points: {
         Args: { _points: number; _reference: string; _user_id: string }
         Returns: undefined
