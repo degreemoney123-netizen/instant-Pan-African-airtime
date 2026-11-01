@@ -12,6 +12,7 @@ import { VendorSection } from "@/components/VendorSection";
 import { CountryRegionBar } from "@/components/CountryRegionBar";
 import { OrderTracker } from "@/components/OrderTracker";
 import { UtilitySection } from "@/components/UtilitySection";
+import { WaecSection } from "@/components/WaecSection";
 import { SalesTicker } from "@/components/SalesTicker";
 import { TrustBadges } from "@/components/TrustBadges";
 import { Testimonials } from "@/components/Testimonials";
@@ -305,6 +306,8 @@ function Index() {
         <TrustBadges />
 
         <UtilitySection country={country} onReceipt={setReceipt} />
+
+        <WaecSection />
 
         <OrderTracker />
 
