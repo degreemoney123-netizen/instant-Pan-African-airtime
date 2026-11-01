@@ -107,6 +107,12 @@ function Index() {
               >
                 {t("nav_track")}
               </a>
+              <a
+                href="#waec"
+                className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
+              >
+                WAEC
+              </a>
               <Link
                 to="/account"
                 className="rounded-full border border-primary-foreground/25 px-3 py-1 text-[11px] font-bold"
