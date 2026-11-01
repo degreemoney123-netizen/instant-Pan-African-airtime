@@ -1,5 +1,20 @@
 import type { Json } from "@/integrations/supabase/types";
 
+export const FAILED_STATUS = "Pending/Failed";
+
+async function markFailed(id: string, reference: string, detail: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  await supabaseAdmin
+    .from("orders")
+    .update({
+      status: FAILED_STATUS,
+      provider_event: { fulfillment: detail, needs_manual_retry: true, failed_at: new Date().toISOString() } as unknown as Json,
+    })
+    .eq("id", id);
+  // Admin alert: surfaces in server logs; order stays flagged for manual retry.
+  console.error(`[ADMIN ALERT] DataHub fulfillment failed for ${reference}: ${detail}`);
+}
+
 const DATAHUB_URL = "https://app.datahubgh.com/api/v1/topup";
 
 export interface FulfillResult {
@@ -28,7 +43,7 @@ export async function fulfillOrder(reference: string): Promise<FulfillResult> {
   if (order.status === "Delivered") {
     return { reference, status: "Delivered", simulated: false };
   }
-  if (order.status !== "Paid & Processing") {
+  if (order.status !== "Paid & Processing" && order.status !== FAILED_STATUS) {
     return { reference, status: order.status, simulated: false, detail: "Order is not paid yet" };
   }
 
@@ -47,7 +62,9 @@ export async function fulfillOrder(reference: string): Promise<FulfillResult> {
     simulated = true;
     detail = "Simulated delivery (no DATAHUB_API_KEY configured)";
   } else {
-    const res = await fetch(DATAHUB_URL, {
+    let res: Response;
+    try {
+    res = await fetch(DATAHUB_URL, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -60,16 +77,18 @@ export async function fulfillOrder(reference: string): Promise<FulfillResult> {
         reference: order.reference,
       }),
     });
+    } catch (e) {
+      const msg = `DataHub unreachable: ${e instanceof Error ? e.message : "network error"}`;
+      await markFailed(order.id, reference, msg);
+      return { reference, status: FAILED_STATUS, simulated: false, detail: msg };
+    }
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
       console.error("DataHub topup failed", res.status, text.slice(0, 300));
-      return {
-        reference,
-        status: order.status,
-        simulated: false,
-        detail: `DataHub rejected the top-up (HTTP ${res.status})`,
-      };
+      const msg = `DataHub rejected the top-up (HTTP ${res.status})`;
+      await markFailed(order.id, reference, msg);
+      return { reference, status: FAILED_STATUS, simulated: false, detail: msg };
     }
     detail = "Delivered via DataHub GH";
   }
