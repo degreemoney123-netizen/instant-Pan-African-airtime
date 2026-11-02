@@ -150,6 +150,9 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
         metadata: {
           order_id: orderIdValue,
           recipient: local,
+          recipient_phone: local,
+          network: active.short.split(" ")[0]?.toUpperCase(),
+          plan_id: item.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
           item,
           country: country.name,
           local_amount: charge.localDisplay,

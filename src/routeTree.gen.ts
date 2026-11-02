@@ -20,6 +20,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as VendorRouteImport } from './routes/vendor'
 import { Route as ApiAssistantRouteImport } from './routes/api/assistant'
 import { Route as ApiFulfillOrderRouteImport } from './routes/api/fulfill-order'
+import { Route as ApiPaystackWebhookRouteImport } from './routes/api/paystack-webhook'
 import { Route as OrderSuccessRouteImport } from './routes/order.success'
 import { Route as ApiPublicFulfillOrderRouteImport } from './routes/api/public/fulfill-order'
 import { Route as ApiPublicWebhooksPaystackRouteImport } from './routes/api/public/webhooks/paystack'
@@ -79,6 +80,11 @@ const ApiFulfillOrderRoute = ApiFulfillOrderRouteImport.update({
   path: '/api/fulfill-order',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPaystackWebhookRoute = ApiPaystackWebhookRouteImport.update({
+  id: '/api/paystack-webhook',
+  path: '/api/paystack-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrderSuccessRoute = OrderSuccessRouteImport.update({
   id: '/order/success',
   path: '/order/success',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/vendor': typeof VendorRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/fulfill-order': typeof ApiFulfillOrderRoute
+  '/api/paystack-webhook': typeof ApiPaystackWebhookRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/fulfill-order': typeof ApiPublicFulfillOrderRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/vendor': typeof VendorRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/fulfill-order': typeof ApiFulfillOrderRoute
+  '/api/paystack-webhook': typeof ApiPaystackWebhookRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/fulfill-order': typeof ApiPublicFulfillOrderRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/vendor': typeof VendorRoute
   '/api/assistant': typeof ApiAssistantRoute
   '/api/fulfill-order': typeof ApiFulfillOrderRoute
+  '/api/paystack-webhook': typeof ApiPaystackWebhookRoute
   '/order/success': typeof OrderSuccessRoute
   '/api/public/fulfill-order': typeof ApiPublicFulfillOrderRoute
   '/api/public/webhooks/paystack': typeof ApiPublicWebhooksPaystackRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/vendor'
     | '/api/assistant'
     | '/api/fulfill-order'
+    | '/api/paystack-webhook'
     | '/order/success'
     | '/api/public/fulfill-order'
     | '/api/public/webhooks/paystack'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/vendor'
     | '/api/assistant'
     | '/api/fulfill-order'
+    | '/api/paystack-webhook'
     | '/order/success'
     | '/api/public/fulfill-order'
     | '/api/public/webhooks/paystack'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/vendor'
     | '/api/assistant'
     | '/api/fulfill-order'
+    | '/api/paystack-webhook'
     | '/order/success'
     | '/api/public/fulfill-order'
     | '/api/public/webhooks/paystack'
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   VendorRoute: typeof VendorRoute
   ApiAssistantRoute: typeof ApiAssistantRoute
   ApiFulfillOrderRoute: typeof ApiFulfillOrderRoute
+  ApiPaystackWebhookRoute: typeof ApiPaystackWebhookRoute
   OrderSuccessRoute: typeof OrderSuccessRoute
   ApiPublicFulfillOrderRoute: typeof ApiPublicFulfillOrderRoute
   ApiPublicWebhooksPaystackRoute: typeof ApiPublicWebhooksPaystackRoute
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFulfillOrderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/paystack-webhook': {
+      id: '/api/paystack-webhook'
+      path: '/api/paystack-webhook'
+      fullPath: '/api/paystack-webhook'
+      preLoaderRoute: typeof ApiPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/order/success': {
       id: '/order/success'
       path: '/order/success'
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   VendorRoute: VendorRoute,
   ApiAssistantRoute: ApiAssistantRoute,
   ApiFulfillOrderRoute: ApiFulfillOrderRoute,
+  ApiPaystackWebhookRoute: ApiPaystackWebhookRoute,
   OrderSuccessRoute: OrderSuccessRoute,
   ApiPublicFulfillOrderRoute: ApiPublicFulfillOrderRoute,
   ApiPublicWebhooksPaystackRoute: ApiPublicWebhooksPaystackRoute,
