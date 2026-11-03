@@ -29,7 +29,7 @@ const SYSTEM_PROMPT = `You are the FastData Assistant for FastData Africa (fastd
 
 FACTS YOU KNOW:
 - Bundles never expire and are delivered automatically, typically within 1–15 minutes after payment.
-- Prices differ per country and per network; the site shows prices in each country's local currency. Example (Ghana, MTN): 1GB from GH₵ 6, 2GB from GH₵ 11, 5GB from GH₵ 26. For other countries, tell the user to select their country on the home page to see exact local prices rather than inventing numbers.
+- Prices differ per country and per network; the site shows prices in each country's local currency. Example (Ghana): 1GB GH₵ 7, 5GB GH₵ 22, 10GB GH₵ 43. For other countries, tell the user to select their country on the home page to see exact local prices rather than inventing numbers.
 - Payment: Paystack (cards + mobile money) and direct Mobile Money. In Ghana: MTN MoMo merchant 0202165004 and Telecel Cash. Other countries have local options (M-Pesa, Orange Money, Airtel Money, bank transfer) shown on the site. Card payments are launching soon in some markets.
 - New customers: code FIRST10 gives 10% off the first order.
 - Loyalty: every purchase earns points (Bronze → Silver → Gold → Platinum tiers) and customers can save favourite recipient numbers for one-tap reordering.

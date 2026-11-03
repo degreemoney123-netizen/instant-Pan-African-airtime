@@ -35,8 +35,10 @@ export type Country = {
   usd: number;
   currency: string;
   symbol: string;
-  /** price of 1GB in local currency; other sizes scale from this */
+  /** reference 1GB price in local currency; other sizes scale from this */
   base: number;
+  /** exact retail prices for named sizes, overriding base × multiplier */
+  prices?: Record<string, number>;
   round: number;
   networks: Network[];
   momo: { label: string; value: string }[];
@@ -62,6 +64,7 @@ export const COUNTRIES: Country[] = [
     symbol: "GH₵",
     base: 6,
     round: 1,
+    prices: { "1GB": 7, "5GB": 22, "10GB": 43 },
     networks: [
       n("mtn", "MTN Ghana", "MTN", "mtn"),
       n("telecel", "Telecel Ghana", "Telecel", "telecel"),
@@ -1597,8 +1600,9 @@ export type Bundle = { size: string; price: number; tag?: string };
 export const bundlesFor = (country: Country, networkIndex = 0): Bundle[] => {
   const netAdjust = 1 - networkIndex * 0.04;
   return SIZES.map((size, i) => {
+    const set = country.prices?.[size];
     const raw = country.base * (MULT[i] as number) * netAdjust;
-    const price = Math.max(country.round, Math.round(raw / country.round) * country.round);
+    const price = set ?? Math.max(country.round, Math.round(raw / country.round) * country.round);
     const b: Bundle = { size, price };
     const tag = TAGS[size];
     if (tag) b.tag = tag;
