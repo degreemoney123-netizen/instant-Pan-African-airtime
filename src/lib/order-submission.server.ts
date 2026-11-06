@@ -3,19 +3,21 @@ import { orderFailure, pendingOrderRow, type orderInputSchema, type OrderCreatio
 
 export async function insertPendingOrder(data: z.infer<typeof orderInputSchema>, userId: string | null): Promise<OrderCreationResult> {
   const reference = `FD-${crypto.randomUUID()}`;
-  if (!process.env["SUPABASE_URL"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
-    console.error("[Order creation] Private database configuration missing", {
+  if (!process.env["SUPABASE_URL"] || !process.env["SUPABASE_PUBLISHABLE_KEY"]) {
+    console.error("[Order creation] Public database configuration missing", {
       code: "ORDER_CONFIGURATION",
       missingUrl: !process.env["SUPABASE_URL"],
-      missingServerCredential: !process.env["SUPABASE_SERVICE_ROLE_KEY"],
+      missingPublishableKey: !process.env["SUPABASE_PUBLISHABLE_KEY"],
     });
     return orderFailure("ORDER_CONFIGURATION");
   }
 
   try {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    // Uses the publishable key with the orders_insert_anyone RLS policy, so order
+    // creation works on any deployment (Lovable, Vercel) without private keys.
+    const { supabase } = await import("@/integrations/supabase/client");
     const row = pendingOrderRow(data, reference, userId);
-    const { error } = await supabaseAdmin.from("orders").insert(row);
+    const { error } = await supabase.from("orders").insert(row);
     if (error) {
       // Keep database diagnostics on the server; never log the customer payload.
       const redact = (value: string | null) => {

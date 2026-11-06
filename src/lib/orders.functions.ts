@@ -14,12 +14,11 @@ export const createPendingOrder = createServerFn({ method: "POST" })
     const authorization = getRequest().headers.get("authorization");
     let userId: string | null = null;
     if (authorization) {
-      if (!process.env["SUPABASE_URL"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
-        return orderFailure("ORDER_CONFIGURATION");
-      }
       if (!authorization.startsWith("Bearer ")) return orderFailure("ORDER_AUTH_FAILED");
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data: auth, error } = await supabaseAdmin.auth.getUser(authorization.slice(7));
+      // Verify the caller's token with the publishable client so this works on
+      // any deployment without private keys.
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data: auth, error } = await supabase.auth.getUser(authorization.slice(7));
       if (error || !auth.user) return orderFailure("ORDER_AUTH_FAILED");
       userId = auth.user.id;
     }
