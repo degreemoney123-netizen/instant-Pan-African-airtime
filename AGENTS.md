@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Data checkout uses the shared order input/row mapper and server-only insert helper; derive ownership from verified authentication, and return safe error codes while keeping database diagnostics server-side.

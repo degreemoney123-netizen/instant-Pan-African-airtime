@@ -208,6 +208,7 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
   };
 
   const next = async () => {
+    if (saving) return;
     if (step === 1) {
       if (!isValidLocalPhone(phone, country)) {
         setError(`Enter a valid ${country.name} mobile number (e.g. 059XXXXXXX).`);
@@ -245,13 +246,25 @@ export function OrderDialog({ open, onOpenChange, bundle, country, network, onRe
           },
         };
         const res = user ? await createMyOrder(payload) : await createOrder(payload);
+        if (res.error || !res.reference) {
+          const message = `${res.error?.message ?? "Could not save your order."} (${res.error?.code ?? "ORDER_INSERT_FAILED"})`;
+          console.error("[Checkout] Order creation failed", res.error);
+          setError(message);
+          toast.error(message);
+          return;
+        }
         setReference(res.reference);
         setOrderIdValue(orderId);
         setStep(3);
         toast.success("Order created — complete payment to confirm");
-      } catch {
-        setError("We could not start this order. Please try again.");
-        toast.error("Could not create the order");
+      } catch (cause) {
+        const configurationMissing = cause instanceof Error && cause.message.includes("Missing Supabase environment");
+        const message = configurationMissing
+          ? "Order checkout is unavailable because the site's private connection settings are missing. Please contact support. (ORDER_CONFIGURATION)"
+          : "We could not start this order. Please try again or sign in again. (ORDER_REQUEST_FAILED)";
+        console.error("[Checkout] Order request failed", { code: configurationMissing ? "ORDER_CONFIGURATION" : "ORDER_REQUEST_FAILED" });
+        setError(message);
+        toast.error(message);
       } finally {
         setSaving(false);
       }

@@ -1,0 +1,22 @@
+import assert from "node:assert/strict";
+import { orderInputSchema, pendingOrderRow, orderFailure } from "./order-submission";
+
+const input = orderInputSchema.parse({ orderId: "FD-TEST", recipient: " 020 216-5004 ", item: "1GB MTN Non-Expiry", amount: 7, currency: "GHS", country: "Ghana" });
+assert.equal(input.recipient, "0202165004");
+const owner = "ea57d970-bcdb-4e06-8a69-7a04ff360bff";
+const row = pendingOrderRow(input, "FD-REFERENCE", owner);
+assert.equal(row.user_id, owner);
+assert.equal(row.amount, 7);
+assert.equal(row.recipient, "0202165004");
+assert.equal(row.status, "Pending Payment");
+assert.equal(row.provider, "paystack");
+assert.equal(row.order_id, "FD-TEST");
+assert.equal(row.reference, "FD-REFERENCE");
+assert.equal(pendingOrderRow(input, "FD-GUEST", null).user_id, null);
+assert.equal("phone_number" in row, false);
+assert.equal(orderInputSchema.safeParse({ ...input, amount: 0 }).success, false);
+assert.equal(orderInputSchema.safeParse({ ...input, recipient: "abc" }).success, false);
+assert.equal("user_id" in orderInputSchema.parse({ ...input, user_id: "forged-owner" }), false);
+assert.equal(orderFailure("42501").error?.code, "42501");
+assert.equal(orderFailure("ORDER_CONFIGURATION").reference, null);
+console.log("Order submission checks passed");

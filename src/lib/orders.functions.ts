@@ -1,42 +1,29 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { orderInputSchema, orderFailure } from "@/lib/order-submission";
 
-const createSchema = z.object({
-  orderId: z.string().min(3).max(40),
-  recipient: z.string().min(6).max(20),
-  item: z.string().min(1).max(120),
-  amount: z.number().positive().max(10_000_000),
-  currency: z.string().min(2).max(8),
-  country: z.string().min(1).max(80),
-  email: z.string().email().max(160).optional(),
-});
+const createSchema = orderInputSchema;
 
 /** Creates a pending order and returns the Paystack payment reference. */
 export const createPendingOrder = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => createSchema.parse(input))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const reference = `FD-${Date.now().toString(36).toUpperCase()}-${Math.random()
-      .toString(36)
-      .slice(2, 8)
-      .toUpperCase()}`;
-
-    const { error } = await supabaseAdmin.from("orders").insert({
-      reference,
-      order_id: data.orderId,
-      recipient: data.recipient,
-      item: data.item,
-      amount: data.amount,
-      currency: data.currency,
-      country: data.country,
-      customer_email: data.email ?? null,
-      status: "Pending Payment",
-    });
-
-    if (error) throw new Error("Could not create order");
-    return { reference };
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const { insertPendingOrder } = await import("@/lib/order-submission.server");
+    const authorization = getRequest().headers.get("authorization");
+    let userId: string | null = null;
+    if (authorization) {
+      if (!process.env["SUPABASE_URL"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
+        return orderFailure("ORDER_CONFIGURATION");
+      }
+      if (!authorization.startsWith("Bearer ")) return orderFailure("ORDER_AUTH_FAILED");
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: auth, error } = await supabaseAdmin.auth.getUser(authorization.slice(7));
+      if (error || !auth.user) return orderFailure("ORDER_AUTH_FAILED");
+      userId = auth.user.id;
+    }
+    return insertPendingOrder(data, userId);
   });
 
 /** Public status lookup by unguessable payment reference. */
@@ -83,26 +70,6 @@ export const createMyPendingOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => createSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-    const reference = `FD-${Date.now().toString(36).toUpperCase()}-${Math.random()
-      .toString(36)
-      .slice(2, 8)
-      .toUpperCase()}`;
-
-    const { error } = await supabaseAdmin.from("orders").insert({
-      reference,
-      order_id: data.orderId,
-      recipient: data.recipient,
-      item: data.item,
-      amount: data.amount,
-      currency: data.currency,
-      country: data.country,
-      customer_email: data.email ?? null,
-      status: "Pending Payment",
-      user_id: context.userId,
-    });
-
-    if (error) throw new Error("Could not create order");
-    return { reference };
+    const { insertPendingOrder } = await import("@/lib/order-submission.server");
+    return insertPendingOrder(data, context.userId);
   });
