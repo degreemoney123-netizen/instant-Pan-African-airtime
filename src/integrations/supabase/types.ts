@@ -331,6 +331,20 @@ export type Database = {
         Args: { _amount: number; _reference: string }
         Returns: boolean
       }
+      create_pending_order: {
+        Args: {
+          p_amount: number
+          p_country: string
+          p_currency: string
+          p_customer_email?: string
+          p_item: string
+          p_order_id: string
+          p_recipient: string
+          p_reference: string
+          p_user_id?: string
+        }
+        Returns: string
+      }
       credit_referral_commission: {
         Args: { _amount: number; _reference: string; _seller: string }
         Returns: undefined
